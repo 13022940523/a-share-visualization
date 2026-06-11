@@ -845,21 +845,24 @@ var stockAnalysisData = {
         showToast(isDark ? '深色模式已开启' : '浅色模式已开启');
     });
 
-    // 筛选逻辑
+    // 筛选逻辑（修复版：只筛选个股表格，不筛选板块分析员数据）
     function applyFilter(filter) {
         currentFilter = filter;
-        var rows = document.querySelectorAll('#stockTable tbody tr, #capitalTable tbody tr, #aiStockTable tbody tr, #semiconductorTable tbody tr');
+        // 只筛选个股相关表格，排除板块分析员的资金/板块表格
+        var rows = document.querySelectorAll('#stockTable tbody tr, #aiStockTable tbody tr');
         rows.forEach(function(row) {
-            var cells = row.querySelectorAll('td');
             var show = true;
-            if (filter !== 'none' && cells.length > 0) {
-                var text = row.textContent;
-                if (filter === 'rise') show = (text.indexOf('+') > -1 && text.indexOf('-') === -1) || text.indexOf('%') > -1 && !text.match(/-\d/);
-                if (filter === 'fall') {
-                    var tds = row.querySelectorAll('td');
-                    for (var i = 0; i < tds.length; i++) {
-                        if (tds[i].className === 'rise' || tds[i].classList.contains('rise')) { show = false; break; }
-                    }
+            if (filter !== 'none') {
+                // 涨跌幅/涨幅列在表格第5列（index=4）
+                var changeCell = row.cells[4];
+                if (changeCell) {
+                    var cls = changeCell.className || '';
+                    var isRise = cls.indexOf('rise') > -1 || cls.indexOf('stock-positive') > -1;
+                    var isFall = cls.indexOf('fall') > -1 || cls.indexOf('stock-negative') > -1;
+                    if (filter === 'rise') show = isRise;
+                    if (filter === 'fall') show = isFall;
+                } else {
+                    show = false;
                 }
             }
             row.style.display = show ? '' : 'none';
