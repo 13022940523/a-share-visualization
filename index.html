@@ -47,7 +47,7 @@
     </header>
 
     <div class="data-source-note">
-        ⚠️ <strong>数据来源：</strong>大盘分析（A股每日市场分析报告_20260610.md）｜板块分析（板块分析报告_20260610.md）｜数据截止日期：2026年6月10日（星期三）
+        ⚠️ <strong>数据来源：</strong>大盘分析（大盘行情分析_20260610.md）｜板块分析（sector_analysis_20260610.md）｜个股分析（A股每日市场分析报告_20260610.md）｜数据截止日期：2026年6月10日（星期三）
     </div>
 
     <!-- 大盘分析区域 -->
@@ -107,9 +107,9 @@
 
     <!-- 半导体板块重点个股 -->
     <div class="card" style="margin-top:20px;">
-        <h3>💎 半导体板块重点个股（板块分析员）</h3>
+        <h3>💎 电子化学品/金属新材料板块重点个股（板块分析员）</h3>
         <table id="semiconductorTable">
-            <thead><tr><th>代码</th><th>名称</th><th>涨跌幅</th><th>成交额(亿)</th><th>主力净流入</th></tr></thead>
+            <thead><tr><th>代码</th><th>名称</th><th>涨跌幅</th><th>所属板块</th><th>概念标签</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
@@ -131,9 +131,9 @@
 
     <!-- 今日涨停主题归类 -->
     <div class="card" style="margin-top:20px;">
-        <h3>📌 今日涨停主题归类（板块分析员）</h3>
+        <h3>📌 热门板块动向（板块分析员）</h3>
         <table id="limitUpTable">
-            <thead><tr><th>代码</th><th>名称</th><th>涨停原因</th></tr></thead>
+            <thead><tr><th>排名</th><th>板块名称</th><th>涨跌幅</th><th>领涨股</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
@@ -147,12 +147,12 @@
 
 <script>
 // ============================================================
-// 数据定义：大盘分析 (来自 A股每日市场分析报告_20260610.md)
+// 数据定义：大盘分析 (来自 大盘行情分析_20260610.md 和 A股每日市场分析报告_20260610.md)
 // ============================================================
 var marketAnalysisReport = {
     basicInfo: {
         date: '2026年6月10日（星期三）',
-        generateTime: '2026年6月10日 22:22',
+        generateTime: '2026年6月11日 08:25',
         dataSource: '同花顺(THS)、AkShare',
         platform: 'OpenClaw 大盘分析员 + 板块分析员 + 个股分析员'
     },
@@ -224,36 +224,36 @@ var marketAnalysisReport = {
         operationSuggestion: ['保持谨慎，控制仓位在5成以下','关注防御性板块机会','避免追高题材股','AI个股分化，关注有基本面支撑的标的']
     },
     getSummary: function() {
-        return '2026年6月10日A股市场整体调整，深证成指跌2.06%，创业板指跌2.70%，涨跌比0.43:1。生物制品领涨，芯片/半导体活跃。AI/科技板块大幅调整，海光信息等资金龙头逆市走强。操作上建议控制仓位5成以下，关注防御板块及科技股低吸机会。';
+        return '2026年6月10日A股市场整体调整，深证成指跌2.06%，创业板指跌2.70%，涨跌比0.43:1。电子化学品+16.42%、金属新材料+20.00%领涨，芯片/半导体活跃。AI/科技板块大幅调整，海光信息等资金龙头逆市走强。操作上建议控制仓位5成以下，关注防御板块及科技股低吸机会。';
     }
 };
 
 // ============================================================
-// 数据定义：板块分析 (来自 板块分析报告_20260610.md)
+// 数据定义：板块分析 (来自 sector_analysis_20260610.md 和 sector_data_20260610.csv)
 // ============================================================
 var sectorAnalysisData = {
     analysisDate: '2026-06-10',
-    // 行业板块涨跌幅排名Top15
+    // 行业板块涨跌幅排名Top15（来自CSV）
     sectorRiseFall: [
-        { rank: 1, name: '化学制品', changeRate: 8.26 },
-        { rank: 2, name: '半导体', changeRate: 8.06 },
-        { rank: 3, name: '专用设备', changeRate: 5.33 },
-        { rank: 4, name: '塑料制品', changeRate: 4.84 },
-        { rank: 5, name: '汽车零部件', changeRate: 3.74 },
-        { rank: 6, name: '电子化学品', changeRate: 3.38 },
-        { rank: 7, name: '通用设备', changeRate: 3.33 },
-        { rank: 8, name: 'IT服务', changeRate: 3.25 },
-        { rank: 9, name: '保险', changeRate: 3.19 },
-        { rank: 10, name: '化学原料', changeRate: 2.96 },
-        { rank: 11, name: '化学制药', changeRate: 2.92 },
-        { rank: 12, name: '建筑装饰', changeRate: 2.62 },
-        { rank: 13, name: '光伏设备', changeRate: 2.60 },
-        { rank: 14, name: '房地产', changeRate: 2.60 },
-        { rank: 15, name: '文化传媒', changeRate: 2.51 }
+        { rank: 1, name: '金属新材料', changeRate: 20.00 },
+        { rank: 2, name: '电子化学品', changeRate: 16.42 },
+        { rank: 3, name: '专用设备', changeRate: 15.52 },
+        { rank: 4, name: '自动化设备', changeRate: 9.60 },
+        { rank: 5, name: '电网设备', changeRate: 9.12 },
+        { rank: 6, name: '医疗服务', changeRate: 6.79 },
+        { rank: 7, name: '包装印刷', changeRate: 9.98 },
+        { rank: 8, name: '石油加工贸易', changeRate: 9.12 },
+        { rank: 9, name: '美容护理', changeRate: 3.54 },
+        { rank: 10, name: '物流', changeRate: 3.99 },
+        { rank: 11, name: '医药商业', changeRate: 3.85 },
+        { rank: 12, name: '中药', changeRate: 3.32 },
+        { rank: 13, name: '互联网电商', changeRate: 2.80 },
+        { rank: 14, name: '教育', changeRate: 1.91 },
+        { rank: 15, name: '能源金属', changeRate: 1.94 }
     ],
     // 主力资金净流入TOP20
     capitalInflowTop20: [
-        { rank: 1, code: '688041.SH', name: '海光信息', inflow: 17.00, changeRate: '+6.20%' },
+        { rank: 1, code: '688041.SH', name: '海光信息', inflow: 17.00, changeRate: '+3.96%' },
         { rank: 2, code: '300502.SZ', name: '新易盛', inflow: 10.37, changeRate: '-1.68%' },
         { rank: 3, code: '300604.SZ', name: '长川科技', inflow: 10.34, changeRate: '+6.59%' },
         { rank: 4, code: '600030.SH', name: '中信证券', inflow: 8.32, changeRate: '+2.19%' },
@@ -274,49 +274,30 @@ var sectorAnalysisData = {
         { rank: 19, code: '002353.SZ', name: '杰瑞股份', inflow: 3.79, changeRate: '-4.37%' },
         { rank: 20, code: '001309.SZ', name: '德明利', inflow: 3.63, changeRate: '+0.35%' }
     ],
-    // 半导体板块个股
+    // 电子化学品和金属新材料板块个股（来自hot_stocks_20260610.csv）
     semiconductorStocks: [
-        { code: '688530.SH', name: '欧莱新材', changeRate: '+13.35%', turnover: '8.39', inflow: '85.65万' },
-        { code: '688783.SH', name: '西安奕材', changeRate: '+12.75%', turnover: '24.34', inflow: '32.70万' },
-        { code: '688809.SH', name: '强一股份', changeRate: '+10.88%', turnover: '23.91', inflow: '3.82亿' },
-        { code: '688535.SH', name: '华海诚科', changeRate: '+10.35%', turnover: '16.95', inflow: '1.22亿' },
-        { code: '003026.SZ', name: '中晶科技', changeRate: '+10.02%', turnover: '4.29', inflow: '36.80万' },
-        { code: '603375.SH', name: '盛景微', changeRate: '+10.01%', turnover: '2.05', inflow: '4.93万' },
-        { code: '600206.SH', name: '有研新材', changeRate: '+10.00%', turnover: '35.73', inflow: '3.14亿' },
-        { code: '688061.SH', name: '灿瑞科技', changeRate: '+8.87%', turnover: '1.46', inflow: '11.60万' },
-        { code: '688689.SH', name: '银河微电', changeRate: '+8.67%', turnover: '2.25', inflow: '5.78万' },
-        { code: '300666.SZ', name: '江丰电子', changeRate: '+8.36%', turnover: '65.09', inflow: '5.20亿' }
+        { code: '688456.SH', name: '有研粉材', changeRate: '+20.00%', sector: '金属新材料', concepts: '先进封装,芯片概念,第三代半导体' },
+        { code: '688146.SH', name: '中船特气', changeRate: '+16.42%', sector: '电子化学品', concepts: '芯片概念,光刻机,中芯国际概念' },
+        { code: '688549.SH', name: '中巨芯', changeRate: '+10.55%', sector: '电子化学品', concepts: '芯片概念,半导体材料' },
+        { code: '688786.SH', name: '悦安新材', changeRate: '+10.74%', sector: '金属新材料', concepts: '磁性材料,稀土永磁' },
+        { code: '300283.SZ', name: '温州宏丰', changeRate: '+9.12%', sector: '电网设备', concepts: '电工合金' },
+        { code: '300400.SZ', name: '劲拓股份', changeRate: '+9.60%', sector: '自动化设备', concepts: '自动化设备,智能制造' }
     ],
     // AI人工智能板块个股
     aiStocks: [
-        { code: '688041.SH', name: '海光信息', changeRate: '+6.20%', turnover: '188.82', inflow: '17.00亿' },
+        { code: '688041.SH', name: '海光信息', changeRate: '+3.96%', turnover: '127.92', inflow: '17.00亿' },
         { code: '301396.SZ', name: '宏景科技', changeRate: '+5.42%', turnover: '43.03', inflow: '4.92亿' },
         { code: '001309.SZ', name: '德明利', changeRate: '+0.35%', turnover: '60.46', inflow: '3.63亿' },
         { code: '002181.SZ', name: '粤传媒', changeRate: '+6.63%', turnover: '27.77', inflow: '2.74亿' },
-        { code: '603011.SH', name: '合锻智能', changeRate: '+10.00%', turnover: '21.30', inflow: '2.12亿' },
-        { code: '600869.SH', name: '远东股份', changeRate: '+6.52%', turnover: '42.03', inflow: '2.08亿' },
-        { code: '600050.SH', name: '中国联通', changeRate: '+1.62%', turnover: '9.02', inflow: '1.95亿' },
-        { code: '002625.SZ', name: '光启技术', changeRate: '+4.66%', turnover: '13.26', inflow: '1.86亿' },
-        { code: '603859.SH', name: '能科科技', changeRate: '+8.88%', turnover: '25.59', inflow: '1.25亿' },
-        { code: '688227.SH', name: '品高股份', changeRate: '+14.84%', turnover: '11.53', inflow: '1.22亿' }
+        { code: '603011.SH', name: '合锻智能', changeRate: '+10.00%', turnover: '21.30', inflow: '2.12亿' }
     ],
-    // 今日涨停主题归类
+    // 今日热门板块动向
     limitUpReasons: [
-        { code: '000025.SZ', name: '特力A', reason: '黄金珠宝数字化+物业租赁+深圳国资' },
-        { code: '000029.SZ', name: '深深房A', reason: '权益分派+房地产+深圳国资' },
-        { code: '000048.SZ', name: '京基智农', reason: '协议转让+生猪养殖+猪价反弹+机器人' },
-        { code: '000488.SZ', name: 'ST晨鸣', reason: '浆纸一体化+摘帽预期+一季报减亏' },
-        { code: '000558.SZ', name: '天府文旅', reason: '冰雪旅游+影旅融合+成都国资' },
-        { code: '000815.SZ', name: '美利云', reason: '算力+业绩增长+央企' },
-        { code: '000970.SZ', name: '中科三环', reason: '人形机器人+轴向磁通电机+稀土永磁+中科院' },
-        { code: '001210.SZ', name: '金房能源', reason: '数据中心供冷+综合能源服务+新能源供热' },
-        { code: '001316.SZ', name: '润贝航科', reason: 'AI航检眼镜+可转债+航空器材' },
-        { code: '001332.SZ', name: '锡装股份', reason: '可控核聚变+非标金属压力容器+一季报增长+高送转' },
-        { code: '002081.SZ', name: '金螳螂', reason: '洁净室+海外大单+建筑装饰' },
-        { code: '002119.SZ', name: '康强电子', reason: '封装材料+引线框架+产能满产+回购' },
-        { code: '002125.SZ', name: '湘潭电化', reason: '锰酸锂龙头+固态电池+一季报增长' },
-        { code: '002165.SZ', name: '红宝丽', reason: '环氧丙烷+技改临近+绿色建材+出海' },
-        { code: '002208.SZ', name: '合肥城建', reason: '间接投资长鑫科技+房地产+合肥国资' }
+        { rank: 1, name: '电子化学品', changeRate: '+16.42%', leader: '中船特气(688146)' },
+        { rank: 2, name: '金属新材料', changeRate: '+20.00%', leader: '有研粉材(688456)' },
+        { rank: 3, name: '专用设备', changeRate: '+15.52%', leader: '大鹏工业(920091.BJ)' },
+        { rank: 4, name: '自动化设备', changeRate: '+9.60%', leader: '劲拓股份(300400)' },
+        { rank: 5, name: '医疗服务', changeRate: '+6.79%', leader: '百花医药(600721)' }
     ],
     // 强势个股TOP10
     strongStocks: [
@@ -325,11 +306,11 @@ var sectorAnalysisData = {
         { rank: 3, code: '688216.SH', name: '气派科技', latestPrice: '38.32', riseFall: '+20.01%', concept: '芯片/先进封装/5G/存储芯片/汽车芯片' },
         { rank: 4, code: '688662.SH', name: '富信科技', latestPrice: '112.24', riseFall: '+20.00%', concept: 'CPO/芯片/5G/共封装光学/储能' },
         { rank: 5, code: '688456.SH', name: '有研粉材', latestPrice: '115.98', riseFall: '+20.00%', concept: '先进封装/PCB/机器人/华为昇腾/军民融合' },
-        { rank: 6, code: '688485.SH', name: '九州一轨', latestPrice: '56.83', riseFall: '+20.00%', concept: '光纤/芯片/专精特新/京津冀一体化' },
-        { rank: 7, code: '300721.SZ', name: '怡达股份', latestPrice: '35.83', riseFall: '+19.99%', concept: 'OLED/芯片/锂电池/环氧丙烷/光刻胶' },
-        { rank: 8, code: '688056.SH', name: '莱伯泰科', latestPrice: '61.10', riseFall: '+17.50%', concept: '光刻胶/食品安全/芯片/半导体' },
-        { rank: 9, code: '920471.BJ', name: '美邦科技', latestPrice: '14.64', riseFall: '+17.21%', concept: '合成生物/NMN/环氧丙烷/基因测序' },
-        { rank: 10, code: '688146.SH', name: '中船特气', latestPrice: '292.00', riseFall: '+16.42%', concept: '光刻机/芯片/国家大基金持股/中芯国际概念' }
+        { rank: 6, code: '688146.SH', name: '中船特气', latestPrice: '292.00', riseFall: '+16.42%', concept: '光刻机/芯片/国家大基金持股/中芯国际概念' },
+        { rank: 7, code: '920091.BJ', name: '大鹏工业', latestPrice: '52.10', riseFall: '+15.52%', concept: '新能源汽车/机器人概念' },
+        { rank: 8, code: '688549.SH', name: '中巨芯', latestPrice: '25.05', riseFall: '+10.55%', concept: '芯片概念/半导体材料' },
+        { rank: 9, code: '688786.SH', name: '悦安新材', latestPrice: '46.90', riseFall: '+10.74%', concept: '磁性材料/稀土永磁' },
+        { rank: 10, code: '300400.SZ', name: '劲拓股份', latestPrice: '38.58', riseFall: '+9.60%', concept: '自动化设备/智能制造' }
     ],
     // AI及科技板块整体承压数据
     aiSectorPressure: [
@@ -612,7 +593,7 @@ var stockAnalysisData = {
             var cls = item.inflow >= 0 ? 'rise' : 'fall';
             tBody.innerHTML += '<tr>' +
                 '<td>' + item.rank + '</td>' +
-                '<td>' + item.stock + '</td>' +
+                '<td>' + item.code + '</td>' +
                 '<td><strong>' + item.name + '</strong></td>' +
                 '<td class="' + cls + '">' + (item.inflow >= 0 ? '+' : '') + item.inflow.toFixed(2) + '亿</td>' +
                 '<td class="' + (item.changeRate.indexOf('+') > -1 ? 'rise' : 'fall') + '">' + item.changeRate + '</td>' +
@@ -651,7 +632,7 @@ var stockAnalysisData = {
         document.getElementById('aiStockConclusion').innerHTML = cHtml;
     }
 
-    // ---- 渲染半导体板块个股表 ----
+    // ---- 渲染电子化学品/金属新材料板块个股表 ----
     function renderSemiconductorTable() {
         var tBody = document.querySelector('#semiconductorTable tbody');
         tBody.innerHTML = '';
@@ -663,8 +644,8 @@ var stockAnalysisData = {
                 '<td>' + item.code + '</td>' +
                 '<td><strong>' + item.name + '</strong></td>' +
                 '<td class="' + cls + '">' + item.changeRate + '</td>' +
-                '<td>' + item.turnover + '</td>' +
-                '<td>' + item.inflow + '</td>' +
+                '<td>' + item.sector + '</td>' +
+                '<td style="font-size:11px;text-align:left;">' + item.concepts + '</td>' +
                 '</tr>';
         });
     }
@@ -700,16 +681,17 @@ var stockAnalysisData = {
         });
     }
 
-    // ---- 渲染涨停主题归类表 ----
+    // ---- 渲染热门板块动向表 ----
     function renderLimitUpTable() {
         var tBody = document.querySelector('#limitUpTable tbody');
         tBody.innerHTML = '';
         var list = S.limitUpReasons || [];
         list.forEach(function(item) {
             tBody.innerHTML += '<tr>' +
-                '<td>' + item.code + '</td>' +
+                '<td>' + item.rank + '</td>' +
                 '<td><strong>' + item.name + '</strong></td>' +
-                '<td style="text-align:left;font-size:13px;">' + item.reason + '</td>' +
+                '<td class="rise">' + item.changeRate + '</td>' +
+                '<td>' + item.leader + '</td>' +
                 '</tr>';
         });
     }
