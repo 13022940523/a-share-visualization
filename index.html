@@ -169,7 +169,7 @@
     <!-- 主力资金净流入TOP20 -->
     <div class="card" style="margin-top:20px;">
         <h3>💰 主力资金净流入TOP20（板块分析员）</h3>
-        <table id="capitalTable">
+        <table id="capitalTable" data-no-filter="true">
             <thead><tr><th>排名</th><th>代码</th><th>名称</th><th>净流入(亿)</th><th>涨跌幅</th></tr></thead>
             <tbody></tbody>
         </table>
@@ -188,7 +188,7 @@
     <!-- 半导体板块重点个股 -->
     <div class="card" style="margin-top:20px;">
         <h3>💎 电子化学品/金属新材料板块重点个股（板块分析员）</h3>
-        <table id="semiconductorTable">
+        <table id="semiconductorTable" data-no-filter="true">
             <thead><tr><th>代码</th><th>名称</th><th>涨跌幅</th><th>所属板块</th><th>概念标签</th></tr></thead>
             <tbody></tbody>
         </table>
@@ -853,8 +853,12 @@ var stockAnalysisData = {
         rows.forEach(function(row) {
             var show = true;
             if (filter !== 'none') {
-                // 涨跌幅/涨幅列在表格第5列（index=4）
-                var changeCell = row.cells[4];
+                // 跳过标记为 data-no-filter 的表格（板块分析员数据）
+                if (row.closest('table[data-no-filter]')) {
+                    show = true;
+                } else {
+                    // 涨跌幅/涨幅列在表格第5列（index=4）
+                    var changeCell = row.cells[4];
                 if (changeCell) {
                     var cls = changeCell.className || '';
                     var isRise = cls.indexOf('rise') > -1 || cls.indexOf('stock-positive') > -1;
@@ -864,6 +868,7 @@ var stockAnalysisData = {
                 } else {
                     show = false;
                 }
+                } // end else (非 no-filter 表格)
             }
             row.style.display = show ? '' : 'none';
         });
