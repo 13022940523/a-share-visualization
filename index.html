@@ -38,7 +38,6 @@
         body.dark .stock-positive { color: #f87171; }
         body.dark .stock-negative { color: #4ade80; }
 
-        /* 交互按钮样式 */
         .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
         .toolbar-btn { padding: 6px 14px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; font-family: "Microsoft YaHei", sans-serif; }
         .toolbar-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
@@ -109,10 +108,9 @@
 <div class="container">
     <header>
         <h1>📊 A股每日智能分析平台</h1>
-        <p class="update-time" id="updateTime">数据加载中... <span style="font-size:11px;color:#999;" id="versionTag">v937d6f3</span></p>
+        <p class="update-time" id="updateTime">数据加载中... <span style="font-size:11px;color:#999;" id="versionTag">v20260612</span></p>
     </header>
 
-    <!-- 交互工具栏 -->
     <div class="toolbar">
         <button class="toolbar-btn btn-dark" id="btnDarkMode" title="切换深色模式">🌙 深色模式</button>
         <button class="toolbar-btn btn-filter" id="btnRiseFilter" title="只看上涨个股">📈 只看上涨</button>
@@ -127,10 +125,9 @@
     <div class="filter-info" id="filterInfo"></div>
 
     <div class="data-source-note">
-        ⚠️ <strong>数据来源：</strong>大盘分析（大盘行情分析_20260610.md）｜板块分析（sector_analysis_20260610.md）｜个股分析（A股每日市场分析报告_20260610.md）｜数据截止日期：2026年6月10日（星期三）
+        ⚠️ <strong>数据来源：</strong>大盘分析（大盘行情分析_20260612.md）｜板块分析（A股热门板块分析_2026-06-12.md）｜个股分析（A股每日市场分析报告_20260612.md）｜数据截止日期：2026年6月12日（星期五）
     </div>
 
-    <!-- 大盘分析区域 -->
     <div class="grid-row">
         <div class="card">
             <h3>📈 大盘指数走势（大盘分析员）</h3>
@@ -139,25 +136,23 @@
         <div class="card">
             <h3>📋 大盘指数明细</h3>
             <table id="marketTable">
-                <thead><tr><th>指数名称</th><th>收盘价</th><th>涨跌幅</th><th>成交额(亿)</th><th>振幅</th></tr></thead>
+                <thead><tr><th>指数名称</th><th>收盘价</th><th>涨跌幅</th><th>成交额(亿)</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
     </div>
 
-    <!-- 市场情绪概览 -->
     <div class="card" style="margin-top:20px;">
         <h3>📊 市场情绪概览</h3>
         <table id="emotionTable">
-            <thead><tr><th>上涨家数</th><th>下跌家数</th><th>平盘家数</th><th>涨跌比</th><th>涨停</th><th>跌停</th><th>涨幅>5%</th><th>跌幅>5%</th></tr></thead>
+            <thead><tr><th>上涨家数</th><th>下跌家数</th><th>平盘家数</th><th>涨跌比</th><th>两市成交额(亿)</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
 
-    <!-- 板块分析区域 -->
     <div class="grid-row">
         <div class="card">
-            <h3>🔥 行业板块涨跌幅（板块分析员）</h3>
+            <h3>🔥 热门板块涨跌幅（板块分析员）</h3>
             <div class="chart-box"><canvas id="sectorChart"></canvas></div>
         </div>
         <div class="card">
@@ -166,41 +161,36 @@
         </div>
     </div>
 
-    <!-- 主力资金净流入TOP20 -->
     <div class="card" style="margin-top:20px;">
-        <h3>💰 主力资金净流入TOP20（板块分析员）</h3>
+        <h3>💰 主力资金净流入TOP10板块（板块分析员）</h3>
         <table id="capitalTable" data-no-filter="true">
-            <thead><tr><th>排名</th><th>代码</th><th>名称</th><th>净流入(亿)</th><th>涨跌幅</th></tr></thead>
+            <thead><tr><th>排名</th><th>板块名称</th><th>净流入(亿)</th><th>涨跌幅</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
 
-    <!-- AI板块重点个股（个股分析员） -->
     <div class="card ai-stock-card" style="margin-top:20px;">
         <h3>🤖 AI板块重点个股分析（个股分析员）</h3>
         <table class="ai-stock-table" id="aiStockTable">
-            <thead><tr><th>股票名称</th><th>代码</th><th>概念定位</th><th>收盘价</th><th>涨跌幅</th><th>成交额(亿)</th><th>主力净流入(万)</th><th>评级</th></tr></thead>
+            <thead><tr><th>股票名称</th><th>代码</th><th>概念定位</th><th>收盘价</th><th>涨跌幅</th><th>成交额(亿)</th><th>评级</th></tr></thead>
             <tbody></tbody>
         </table>
         <div class="conclusion-box" id="aiStockConclusion"></div>
     </div>
 
-    <!-- 半导体板块重点个股 -->
     <div class="card" style="margin-top:20px;">
-        <h3>💎 电子化学品/金属新材料板块重点个股（板块分析员）</h3>
+        <h3>💎 半导体板块重点个股（板块分析员）</h3>
         <table id="semiconductorTable" data-no-filter="true">
             <thead><tr><th>代码</th><th>名称</th><th>涨跌幅</th><th>所属板块</th><th>概念标签</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
 
-    <!-- 操作建议 -->
     <div class="card advice-card" style="margin-top:20px;">
         <h3>📋 操作建议与风险提示</h3>
         <div id="operationAdvice"></div>
     </div>
 
-    <!-- 强势个股TOP10 -->
     <div class="card" style="margin-top:20px;">
         <h3>🔥 今日强势个股TOP10</h3>
         <table id="stockTable">
@@ -209,16 +199,14 @@
         </table>
     </div>
 
-    <!-- 今日涨停主题归类 -->
     <div class="card" style="margin-top:20px;">
-        <h3>📌 热门板块动向（板块分析员）</h3>
+        <h3>📌 涨停主线与板块动向（板块分析员）</h3>
         <table id="limitUpTable">
-            <thead><tr><th>排名</th><th>板块名称</th><th>涨跌幅</th><th>领涨股</th></tr></thead>
+            <thead><tr><th>排名</th><th>主线方向</th><th>代表涨停股</th><th>涨停驱动</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
 
-    <!-- 综合报告 -->
     <div class="report-card">
         <h3>📄 三大Agent综合分析报告</h3>
         <div class="report-content" id="reportBox">报告加载中...</div>
@@ -227,248 +215,142 @@
 
 <script>
 // ============================================================
-// 数据定义：大盘分析 (来自 大盘行情分析_20260610.md 和 A股每日市场分析报告_20260610.md)
+// 2026-06-12 数据
 // ============================================================
 var marketAnalysisReport = {
     basicInfo: {
-        date: '2026年6月10日（星期三）',
-        generateTime: '2026年6月11日 08:25',
-        dataSource: '同花顺(THS)、AkShare',
+        date: '2026年6月12日（星期五）',
+        generateTime: '2026年6月13日 20:10',
+        dataSource: '东方财富API + Tushare Pro + 同花顺(thsdk)',
         platform: 'OpenClaw 大盘分析员 + 板块分析员 + 个股分析员'
     },
     mainIndex: [
-        { indexName: '深证成指', closePrice: '14954.10', changeRate: '-2.06%', turnover: '13921.73', amplitude: '2.18%' },
-        { indexName: '创业板指', closePrice: '3854.79', changeRate: '-2.70%', turnover: '6532.53', amplitude: '2.78%' }
+        { indexName: '上证指数', closePrice: '4031.51', changeRate: '+1.12%', turnover: '15374' },
+        { indexName: '深证成指', closePrice: '14963.41', changeRate: '+0.75%', turnover: '16775' },
+        { indexName: '创业板指', closePrice: '3830.35', changeRate: '+0.50%', turnover: '8110' }
     ],
     marketEmotion: {
-        upCount: 1447, downCount: 3376, flatCount: 148,
-        upDownRatio: '0.43:1', limitUpCount: 66, limitDownCount: 25,
-        upOver5Percent: 215, downOver5Percent: 526,
-        conclusion: '市场情绪偏弱，跌多涨少格局明显，涨跌比仅0.43，空头主导；跌停家数相对可控，恐慌情绪尚在管理范围内，属技术性回调而非系统性崩塌。'
-    },
-    hotSections: {
-        conceptSections: [
-            { rank: 1, name: '低空经济/次新股', stock: '邦德股份(920271.BJ)', changeRate: '+29.96%' },
-            { rank: 2, name: 'Web3.0/AIGC/元宇宙', stock: '佳创视讯(300264.SZ)', changeRate: '+20.05%' },
-            { rank: 3, name: '芯片/先进封装/5G', stock: '气派科技(688216.SH)', changeRate: '+20.01%' },
-            { rank: 4, name: 'CPO/芯片/5G', stock: '富信科技(688662.SH)', changeRate: '+20.00%' },
-            { rank: 5, name: '先进封装/PCB/机器人', stock: '有研粉材(688456.SH)', changeRate: '+20.00%' }
-        ],
-        conclusion: [
-            '科技成长活跃：芯片、半导体、CPO、先进封装等科技板块维持较高热度',
-            '次新股异动：北交所次新股表现突出，邦德股份涨幅近30%',
-            'AI及科技板块整体承压：人工智能-12.71%，ChatGPT概念-13.79%，AIGC概念-14.76%'
-        ]
-    },
-    capitalFlow: {
-        topInflow: [
-            { rank: 1, stock: '688041.SH', name: '海光信息', inflow: 17.00, changeRate: '+3.96%' },
-            { rank: 2, stock: '300502.SZ', name: '新易盛', inflow: 10.37, changeRate: '-1.68%' },
-            { rank: 3, stock: '300604.SZ', name: '长川科技', inflow: 10.34, changeRate: '+6.59%' },
-            { rank: 4, stock: '600030.SH', name: '中信证券', inflow: 8.32, changeRate: '+2.19%' },
-            { rank: 5, stock: '300308.SZ', name: '中际旭创', inflow: 7.40, changeRate: '-2.80%' },
-            { rank: 6, stock: '600160.SH', name: '巨化股份', inflow: 6.24, changeRate: '+7.08%' },
-            { rank: 7, stock: '600036.SH', name: '招商银行', inflow: 5.68, changeRate: '+1.07%' },
-            { rank: 8, stock: '601688.SH', name: '华泰证券', inflow: 5.36, changeRate: '+3.14%' },
-            { rank: 9, stock: '300475.SZ', name: '香农芯创', inflow: 5.28, changeRate: '+2.82%' },
-            { rank: 10, stock: '300666.SZ', name: '江丰电子', inflow: 5.20, changeRate: '+8.36%' },
-            { rank: 11, stock: '601166.SH', name: '兴业银行', inflow: 4.95, changeRate: '+2.38%' },
-            { rank: 12, stock: '301396.SZ', name: '宏景科技', inflow: 4.92, changeRate: '+5.42%' },
-            { rank: 13, stock: '688072.SH', name: '拓荆科技', inflow: 4.89, changeRate: '+3.52%' },
-            { rank: 14, stock: '688525.SH', name: '佰维存储', inflow: 4.43, changeRate: '+3.88%' },
-            { rank: 15, stock: '688012.SH', name: '中微公司', inflow: 4.42, changeRate: '+1.43%' },
-            { rank: 16, stock: '688629.SH', name: '华丰科技', inflow: 4.41, changeRate: '+8.47%' },
-            { rank: 17, stock: '600519.SH', name: '贵州茅台', inflow: 4.40, changeRate: '+1.58%' },
-            { rank: 18, stock: '688809.SH', name: '强一股份', inflow: 3.82, changeRate: '+10.88%' },
-            { rank: 19, stock: '002353.SZ', name: '杰瑞股份', inflow: 3.79, changeRate: '-4.37%' },
-            { rank: 20, stock: '001309.SZ', name: '德明利', inflow: 3.63, changeRate: '+0.35%' }
-        ],
-        conclusion: [
-            '主力资金青睐科技成长股，海光信息获近17亿主力流入',
-            '金融股获资金关注，中信证券、华泰证券、招商银行均有资金流入',
-            'AI/科技板块整体大幅调整，主力资金净流出超140亿，筹码有所松动'
-        ]
-    },
-    technicalAnalysis: {
-        szComponent: { open: '15062.51', high: '15149.37', low: '14817.11', close: '14954.10', volume: '71046.23', turnover: '13921.73' },
-        cybIndex: { open: '3897.73', high: '3928.36', low: '3818.31', close: '3854.79', volume: '21220.29', turnover: '6532.53' },
-        conclusion: [
-            '深证成指跌破15000点整数关口，跌幅超2%，技术面偏弱',
-            '创业板指跌幅近2.7%，科技成长股调整压力较大',
-            '两市成交额维持万亿级别，市场交投活跃度尚可'
-        ]
+        upCount: 3923, downCount: 1515, flatCount: 74,
+        totalAmount: 32149,
+        conclusion: '市场情绪偏暖，三大指数全线上涨，上证指数重回4000点上方领涨+1.12%。全市场71.2%个股上涨，赚钱效应显著，两市成交3.21万亿元放量约6629亿，增量资金入场明显。大盘蓝筹风格占优，权重表现优于成长。'
     },
     overallAnalysis: {
-        features: ['调整格局确立：三大指数集体收跌','结构性分化：生物制品逆市走强','情绪偏弱：涨跌比仅0.43','量能维持：万亿级别存量博弈'],
-        trendJudgment: { shortTerm: '偏弱调整', riskTip: '控制仓位' },
-        operationSuggestion: ['保持谨慎，控制仓位在5成以下','关注防御性板块机会','避免追高题材股','AI个股分化，关注有基本面支撑的标的']
+        features: ['普涨格局：上涨占比71.2%，赚钱效应显著','权重占优：上证+1.12%领涨，大盘蓝筹风格主导','放量上攻：两市成交3.21万亿，较前日放量约6629亿','风格分化：成长偏弱，创业板仅+0.50%'],
+        trendJudgment: { shortTerm: '偏暖偏多', riskTip: '关注周末消息面' },
+        operationSuggestion: ['关注有色金属（铜、稀土、小金属）行情持续性','低空经济政策催化持续，可关注相关标的','半导体板块调整中，等待企稳信号','AI板块内算力基础设施优于芯片和应用，控制仓位5成以内']
     },
     getSummary: function() {
-        return '2026年6月10日A股市场整体调整，深证成指跌2.06%，创业板指跌2.70%，涨跌比0.43:1。电子化学品+16.42%、金属新材料+20.00%领涨，芯片/半导体活跃。AI/科技板块大幅调整，海光信息等资金龙头逆市走强。操作上建议控制仓位5成以下，关注防御板块及科技股低吸机会。';
+        return '2026年6月12日A股市场普涨，上证指数+1.12%重回4000点，深证成指+0.75%，创业板指+0.50%。两市成交3.21万亿放量6629亿。小金属+3.24%、盐湖提锂+2.87%、稀土永磁+2.58%领涨；芯片概念-0.53%、中芯国际概念-1.83%领跌。AI板块温和反弹+1.18%，中际旭创成交额全市场第一。操作上建议关注有色金属、低空经济、中特估方向，控制仓位5成以内。';
     }
 };
 
-// ============================================================
-// 数据定义：板块分析 (来自 sector_analysis_20260610.md 和 sector_data_20260610.csv)
-// ============================================================
 var sectorAnalysisData = {
-    analysisDate: '2026-06-10',
-    // 行业板块涨跌幅排名Top15（来自CSV）
+    analysisDate: '2026-06-12',
     sectorRiseFall: [
-        { rank: 1, name: '金属新材料', changeRate: 20.00 },
-        { rank: 2, name: '电子化学品', changeRate: 16.42 },
-        { rank: 3, name: '专用设备', changeRate: 15.52 },
-        { rank: 4, name: '自动化设备', changeRate: 9.60 },
-        { rank: 5, name: '电网设备', changeRate: 9.12 },
-        { rank: 6, name: '医疗服务', changeRate: 6.79 },
-        { rank: 7, name: '包装印刷', changeRate: 9.98 },
-        { rank: 8, name: '石油加工贸易', changeRate: 9.12 },
-        { rank: 9, name: '美容护理', changeRate: 3.54 },
-        { rank: 10, name: '物流', changeRate: 3.99 },
-        { rank: 11, name: '医药商业', changeRate: 3.85 },
-        { rank: 12, name: '中药', changeRate: 3.32 },
-        { rank: 13, name: '互联网电商', changeRate: 2.80 },
-        { rank: 14, name: '教育', changeRate: 1.91 },
-        { rank: 15, name: '能源金属', changeRate: 1.94 }
+        { rank: 1, name: '小金属概念', changeRate: 3.24 },
+        { rank: 2, name: '盐湖提锂', changeRate: 2.87 },
+        { rank: 3, name: '稀土永磁', changeRate: 2.58 },
+        { rank: 4, name: '钛白粉概念', changeRate: 2.56 },
+        { rank: 5, name: '细胞免疫治疗', changeRate: 2.46 },
+        { rank: 6, name: '特钢概念', changeRate: 2.15 },
+        { rank: 7, name: '自由贸易港', changeRate: 2.13 },
+        { rank: 8, name: '可燃冰', changeRate: 2.10 },
+        { rank: 9, name: '中字头股票', changeRate: 1.95 },
+        { rank: 10, name: '培育钻石', changeRate: 1.85 }
     ],
-    // 主力资金净流入TOP20
-    capitalInflowTop20: [
-        { rank: 1, code: '688041.SH', name: '海光信息', inflow: 17.00, changeRate: '+3.96%' },
-        { rank: 2, code: '300502.SZ', name: '新易盛', inflow: 10.37, changeRate: '-1.68%' },
-        { rank: 3, code: '300604.SZ', name: '长川科技', inflow: 10.34, changeRate: '+6.59%' },
-        { rank: 4, code: '600030.SH', name: '中信证券', inflow: 8.32, changeRate: '+2.19%' },
-        { rank: 5, code: '300308.SZ', name: '中际旭创', inflow: 7.40, changeRate: '-2.80%' },
-        { rank: 6, code: '600160.SH', name: '巨化股份', inflow: 6.24, changeRate: '+7.08%' },
-        { rank: 7, code: '600036.SH', name: '招商银行', inflow: 5.68, changeRate: '+1.07%' },
-        { rank: 8, code: '601688.SH', name: '华泰证券', inflow: 5.36, changeRate: '+3.14%' },
-        { rank: 9, code: '300475.SZ', name: '香农芯创', inflow: 5.28, changeRate: '+2.82%' },
-        { rank: 10, code: '300666.SZ', name: '江丰电子', inflow: 5.20, changeRate: '+8.36%' },
-        { rank: 11, code: '601166.SH', name: '兴业银行', inflow: 4.95, changeRate: '+2.38%' },
-        { rank: 12, code: '301396.SZ', name: '宏景科技', inflow: 4.92, changeRate: '+5.42%' },
-        { rank: 13, code: '688072.SH', name: '拓荆科技', inflow: 4.89, changeRate: '+3.52%' },
-        { rank: 14, code: '688525.SH', name: '佰维存储', inflow: 4.43, changeRate: '+3.88%' },
-        { rank: 15, code: '688012.SH', name: '中微公司', inflow: 4.42, changeRate: '+1.43%' },
-        { rank: 16, code: '688629.SH', name: '华丰科技', inflow: 4.41, changeRate: '+8.47%' },
-        { rank: 17, code: '600519.SH', name: '贵州茅台', inflow: 4.40, changeRate: '+1.58%' },
-        { rank: 18, code: '688809.SH', name: '强一股份', inflow: 3.82, changeRate: '+10.88%' },
-        { rank: 19, code: '002353.SZ', name: '杰瑞股份', inflow: 3.79, changeRate: '-4.37%' },
-        { rank: 20, code: '001309.SZ', name: '德明利', inflow: 3.63, changeRate: '+0.35%' }
+    capitalInflowTop10: [
+        { rank: 1, name: '小金属概念', inflow: 133.01, changeRate: '+3.24%' },
+        { rank: 2, name: '锂电池概念', inflow: 121.17, changeRate: '+1.33%' },
+        { rank: 3, name: '同花顺中特估100', inflow: 76.45, changeRate: '+1.80%' },
+        { rank: 4, name: '一带一路', inflow: 53.42, changeRate: '+1.35%' },
+        { rank: 5, name: '新能源汽车', inflow: 57.63, changeRate: '+0.64%' },
+        { rank: 6, name: '盐湖提锂', inflow: 51.83, changeRate: '+2.87%' },
+        { rank: 7, name: '央企国企改革', inflow: 42.33, changeRate: '+1.79%' },
+        { rank: 8, name: '信创', inflow: 49.49, changeRate: '+1.14%' },
+        { rank: 9, name: '证金持股', inflow: 49.28, changeRate: '+1.66%' },
+        { rank: 10, name: '西部大开发', inflow: 47.47, changeRate: '+1.56%' }
     ],
-    // 电子化学品和金属新材料板块个股（来自hot_stocks_20260610.csv）
+    sectorOutflowTop5: [
+        { name: '芯片概念', changeRate: -0.53, capitalFlow: -154.18 },
+        { name: '中芯国际概念', changeRate: -1.83, capitalFlow: -72.46 },
+        { name: '先进封装', changeRate: -1.65, capitalFlow: -66.06 },
+        { name: '中国AI 50', changeRate: -0.42, capitalFlow: -66.23 },
+        { name: '消费电子概念', changeRate: -0.32, capitalFlow: -34.99 }
+    ],
     semiconductorStocks: [
-        { code: '688456.SH', name: '有研粉材', changeRate: '+20.00%', sector: '金属新材料', concepts: '先进封装,芯片概念,第三代半导体' },
-        { code: '688146.SH', name: '中船特气', changeRate: '+16.42%', sector: '电子化学品', concepts: '芯片概念,光刻机,中芯国际概念' },
-        { code: '688549.SH', name: '中巨芯', changeRate: '+10.55%', sector: '电子化学品', concepts: '芯片概念,半导体材料' },
-        { code: '688786.SH', name: '悦安新材', changeRate: '+10.74%', sector: '金属新材料', concepts: '磁性材料,稀土永磁' },
-        { code: '300283.SZ', name: '温州宏丰', changeRate: '+9.12%', sector: '电网设备', concepts: '电工合金' },
-        { code: '300400.SZ', name: '劲拓股份', changeRate: '+9.60%', sector: '自动化设备', concepts: '自动化设备,智能制造' }
+        { code: '300223.SZ', name: '北京君正', changeRate: '+0.08%', sector: '半导体', concepts: '芯片概念' },
+        { code: '300604.SZ', name: '长川科技', changeRate: '-4.17%', sector: '半导体设备', concepts: '芯片测试设备' },
+        { code: '300672.SZ', name: '国科微', changeRate: '-0.33%', sector: '半导体', concepts: '芯片设计' },
+        { code: '600460.SH', name: '士兰微', changeRate: '-3.10%', sector: '半导体', concepts: '功率半导体' },
+        { code: '603986.SH', name: '兆易创新', changeRate: '-0.42%', sector: '半导体', concepts: '存储芯片' },
+        { code: '688012.SH', name: '中微公司', changeRate: '+0.26%', sector: '半导体设备', concepts: '刻蚀设备龙头' }
     ],
-    // AI人工智能板块个股
-    aiStocks: [
-        { code: '688041.SH', name: '海光信息', changeRate: '+3.96%', turnover: '127.92', inflow: '17.00亿' },
-        { code: '301396.SZ', name: '宏景科技', changeRate: '+5.42%', turnover: '43.03', inflow: '4.92亿' },
-        { code: '001309.SZ', name: '德明利', changeRate: '+0.35%', turnover: '60.46', inflow: '3.63亿' },
-        { code: '002181.SZ', name: '粤传媒', changeRate: '+6.63%', turnover: '27.77', inflow: '2.74亿' },
-        { code: '603011.SH', name: '合锻智能', changeRate: '+10.00%', turnover: '21.30', inflow: '2.12亿' }
-    ],
-    // 今日热门板块动向
-    limitUpReasons: [
-        { rank: 1, name: '电子化学品', changeRate: '+16.42%', leader: '中船特气(688146)' },
-        { rank: 2, name: '金属新材料', changeRate: '+20.00%', leader: '有研粉材(688456)' },
-        { rank: 3, name: '专用设备', changeRate: '+15.52%', leader: '大鹏工业(920091.BJ)' },
-        { rank: 4, name: '自动化设备', changeRate: '+9.60%', leader: '劲拓股份(300400)' },
-        { rank: 5, name: '医疗服务', changeRate: '+6.79%', leader: '百花医药(600721)' }
-    ],
-    // 强势个股TOP10
     strongStocks: [
-        { rank: 1, code: '920271.BJ', name: '邦德股份', latestPrice: '14.79', riseFall: '+29.96%', concept: '低空经济/次新股/汽车热管理/专精特新' },
-        { rank: 2, code: '300264.SZ', name: '佳创视讯', latestPrice: '9.34', riseFall: '+20.05%', concept: 'Web3.0/AIGC/元宇宙/人工智能/MR' },
-        { rank: 3, code: '688216.SH', name: '气派科技', latestPrice: '38.32', riseFall: '+20.01%', concept: '芯片/先进封装/5G/存储芯片/汽车芯片' },
-        { rank: 4, code: '688662.SH', name: '富信科技', latestPrice: '112.24', riseFall: '+20.00%', concept: 'CPO/芯片/5G/共封装光学/储能' },
-        { rank: 5, code: '688456.SH', name: '有研粉材', latestPrice: '115.98', riseFall: '+20.00%', concept: '先进封装/PCB/机器人/华为昇腾/军民融合' },
-        { rank: 6, code: '688146.SH', name: '中船特气', latestPrice: '292.00', riseFall: '+16.42%', concept: '光刻机/芯片/国家大基金持股/中芯国际概念' },
-        { rank: 7, code: '920091.BJ', name: '大鹏工业', latestPrice: '52.10', riseFall: '+15.52%', concept: '新能源汽车/机器人概念' },
-        { rank: 8, code: '688549.SH', name: '中巨芯', latestPrice: '25.05', riseFall: '+10.55%', concept: '芯片概念/半导体材料' },
-        { rank: 9, code: '688786.SH', name: '悦安新材', latestPrice: '46.90', riseFall: '+10.74%', concept: '磁性材料/稀土永磁' },
-        { rank: 10, code: '300400.SZ', name: '劲拓股份', latestPrice: '38.58', riseFall: '+9.60%', concept: '自动化设备/智能制造' }
+        { rank: 1, code: '000032.SZ', name: '深桑达A', latestPrice: '18.92', riseFall: '+10.00%', concept: '半导体洁净室+中国电子云+AI算力' },
+        { rank: 2, code: '000099.SZ', name: '中信海直', latestPrice: '17.41', riseFall: '+9.98%', concept: '低空经济+海上油气+央企' },
+        { rank: 3, code: '000151.SZ', name: '中成股份', latestPrice: '13.94', riseFall: '+10.02%', concept: '成套设备+储能+央企+一带一路' },
+        { rank: 4, code: '000506.SZ', name: '招金黄金', latestPrice: '13.73', riseFall: '+10.02%', concept: '黄金+国企' },
+        { rank: 5, code: '000510.SZ', name: '新金路', latestPrice: '19.37', riseFall: '+10.00%', concept: '石英砂+锡钨钽+氯碱化工' },
+        { rank: 6, code: '000547.SZ', name: '航天发展', latestPrice: '20.65', riseFall: '+10.02%', concept: '商业航天+蓝军装备+央企' },
+        { rank: 7, code: '000630.SZ', name: '铜陵有色', latestPrice: '7.10', riseFall: '+10.08%', concept: 'PCB铜箔+全产业链铜' },
+        { rank: 8, code: '000737.SZ', name: '北方铜业', latestPrice: '14.08', riseFall: '+10.00%', concept: '铜+PCB概念+山西国资' },
+        { rank: 9, code: '001696.SZ', name: '宗申动力', latestPrice: '22.84', riseFall: '+10.02%', concept: '低空经济+航空发动机' },
+        { rank: 10, code: '002085.SZ', name: '万丰奥威', latestPrice: '13.59', riseFall: '+10.04%', concept: '低空经济+通航飞机' }
     ],
-    // AI及科技板块整体承压数据
-    aiSectorPressure: [
-        { name: '人工智能', changeRate: -12.71, capitalFlow: -140.57 },
-        { name: 'ChatGPT概念', changeRate: -13.79, capitalFlow: -144.45 },
-        { name: 'AIGC概念', changeRate: -14.76, capitalFlow: -119.00 },
-        { name: '半导体', changeRate: -2.47, capitalFlow: -101.12 },
-        { name: '芯片概念', changeRate: -4.04, capitalFlow: -196.28 }
+    limitUpReasons: [
+        { rank: 1, name: '资源周期（铜/黄金/小金属）', leader: '铜陵有色、北方铜业、招金黄金', driver: '全球通胀预期+供给收紧' },
+        { rank: 2, name: '低空经济', leader: '中信海直、万丰奥威、宗申动力', driver: '政策催化持续' },
+        { rank: 3, name: '央企改革', leader: '中成股份、航天发展、深桑达A', driver: '中特估行情延续' },
+        { rank: 4, name: '新能源上游', leader: '海亮股份（铜箔+固态电池）', driver: '铜箔+固态电池' },
+        { rank: 5, name: 'AI算力', leader: '深桑达A、华明装备', driver: 'AI算力基建需求' }
     ]
 };
 
-// ============================================================
-// 数据定义：个股分析 (来自 A股每日市场分析报告_20260610.md)
-// ============================================================
 var stockAnalysisData = {
-    reportDate: '2026-06-10',
-    dataSource: '同花顺(THS)实时行情',
+    reportDate: '2026-06-12',
     marketSentiment: {
-        riseStocks: 1447, fallStocks: 3376, flatStocks: 148,
-        riseFallRatio: 0.43, limitUp: 66, limitDown: 25,
-        riseOver5Percent: 215, fallOver5Percent: 526
+        riseStocks: 3923, fallStocks: 1515, flatStocks: 74,
+        riseFallRatio: 2.59, limitUp: 0, limitDown: 0,
+        totalAmount: 32149
     },
     aiStocks: [
         {
-            code: '688041.SH',
-            name: '海光信息',
-            type: '半导体/AI芯片龙头',
-            indicators: {
-                closePrice: 49.56,
-                changeRate: 3.96,
-                turnover: 127.92,
-                mainCapitalFlow: 169953,
-                concepts: ['人工智能','芯片概念']
-            },
-            strengthRating: '★★★☆☆',
-            conclusion: '强势 — 资金高度认可，但受制于大盘系统性调整，短期或以震荡消化为主，中期趋势仍偏多。今日逆市上涨近4%，成交额超127亿，主力净流入17亿，全市场排名第一。'
+            code: '300308.SZ', name: '中际旭创', type: 'CPO/光模块龙头',
+            indicators: { closePrice: 1149.00, changeRate: 2.22, turnover: 400.03 },
+            strengthRating: '★★★★☆',
+            conclusion: '强势 — 成交额400亿全市场第一，量价齐升，CPO/光模块作为AI算力核心环节受益于算力需求确定性增长。短期量价配合良好，但5%振幅表明高位分歧仍在，注意回调风险。'
         },
         {
-            code: '688168.SH',
-            name: '安博通',
-            type: '网络安全+AI双概念',
-            indicators: {
-                closePrice: 33.87,
-                changeRate: 6.57,
-                turnover: 27.95,
-                mainCapitalFlow: 1051,
-                concepts: ['网络安全','人工智能']
-            },
+            code: '688256.SH', name: '寒武纪', type: 'AI芯片龙头',
+            indicators: { closePrice: 1240.00, changeRate: 1.68, turnover: 183.80 },
             strengthRating: '★★★☆☆',
-            conclusion: '强势 — 差异化赛道+AI安全逻辑获得资金认可，短期独立行情，但需注意高位震荡风险。公司AI安全产品持续落地，与百度安全深度合作。'
+            conclusion: '中性偏强 — 股价跟随AI板块反弹，但高开回落显示上方压力。AI芯片赛道长期逻辑清晰，但短期受半导体板块回调拖累。后市能否突破1260元阻力是关键。'
         },
         {
-            code: '603283.SH',
-            name: '赛腾股份',
-            type: 'AI检测设备龙头',
-            indicators: {
-                closePrice: 52.06,
-                changeRate: 3.96,
-                turnover: 15.55,
-                mainCapitalFlow: 8788,
-                concepts: ['人工智能','半导体设备']
-            },
-            strengthRating: '★★★☆☆',
-            conclusion: '稳健 — 基本面扎实，AI检测+半导体设备双逻辑支撑，在板块调整中展现防御性，中期趋势偏多。公司自主研发AI检测系统缺陷检出准确率提升超5%。'
+            code: '688041.SH', name: '海光信息', type: 'AI芯片/CPU龙头',
+            indicators: { closePrice: 280.00, changeRate: -3.39, turnover: 37.00 },
+            strengthRating: '★★☆☆☆',
+            conclusion: '偏弱 — 高开低走放量下杀，从高开+3.4%到收盘-3.39%日内波幅近7%。基本面逻辑未变，但技术面已破位，短期需等待企稳信号，支撑位关注270元一线。'
+        },
+        {
+            code: '002230.SZ', name: '科大讯飞', type: 'AI应用龙头',
+            indicators: { closePrice: 40.39, changeRate: -0.98, turnover: 29.44 },
+            strengthRating: '★★☆☆☆',
+            conclusion: '偏弱 — 明显跑输算力硬件端，成交额29.44亿显著偏低，资金关注度不足。动态市盈率持续为负，业绩端尚未兑现，短期内需观察AI应用商业化落地进展。'
         }
     ],
     operationAdvice: {
-        positionControl: '整体仓位建议5成以下，等待市场情绪企稳',
-        defenseFocus: '大盘走弱期间，医药生物等防御板块可适当关注',
-        aiStockStrategy: '海光信息等资金龙头短线或有反复，谨慎追高；安博通、赛腾股份等有基本面支撑的标的可逢低关注',
-        riskTip: '市场系统性调整尚未结束，短期以防守为主，避免题材炒作'
+        positionControl: 'AI板块中期调整未结束，建议控制仓位在5成以内，以算力方向为主',
+        defenseFocus: '关注中特估（央企国企改革）、有色金属等有资金持续流入的方向',
+        aiStockStrategy: 'AI板块内算力基础设施（CPO/光模块）> AI芯片 > AI应用，资金偏好明确',
+        riskTip: '6月12日为周末收盘，下周需关注美股AI龙头动向及国内政策面变化'
     },
     calculateSentimentScore: function() {
         var s = this.marketSentiment;
         var score = 10;
-        if (s.riseFallRatio < 0.5) score -= 4;
-        if (s.limitDown > 20) score -= 2;
-        if (s.fallOver5Percent > 500) score -= 2;
+        if (s.riseFallRatio > 2.0) score += 2;
+        if (s.riseStocks / (s.riseStocks + s.fallStocks) > 0.7) score += 1;
+        if (s.totalAmount > 30000) score += 1;
         return score;
     }
 };
@@ -486,10 +368,8 @@ var stockAnalysisData = {
         return parseFloat(String(str).replace(/,/g, '').replace(/%/g, '').replace(/\+/g, ''));
     }
 
-    // ---- 更新页面时间 ----
     document.getElementById('updateTime').innerText = '数据日期：' + R.basicInfo.date + ' | 生成时间：' + R.basicInfo.generateTime + ' | 数据来源：' + R.basicInfo.dataSource;
 
-    // ---- 渲染大盘指数明细表 ----
     function renderMarketTable() {
         var tBody = document.querySelector('#marketTable tbody');
         tBody.innerHTML = '';
@@ -499,140 +379,77 @@ var stockAnalysisData = {
             var cp = Math.abs(parseNum(item.closePrice));
             tBody.innerHTML += '<tr>' +
                 '<td><strong>' + item.indexName + '</strong></td>' +
-                '<td><strong>' + (isNaN(cp) ? item.closePrice : cp.toLocaleString('en', {minimumFractionDigits: 2})) + '</strong></td>' +
+                '<td><strong>' + cp.toLocaleString('en', {minimumFractionDigits: 2}) + '</strong></td>' +
                 '<td class="' + cls + '">' + item.changeRate + '</td>' +
-                '<td>' + Math.abs(parseNum(item.turnover)).toFixed(0) + '</td>' +
-                '<td>' + item.amplitude + '</td>' +
+                '<td>' + Math.abs(parseNum(item.turnover)).toLocaleString() + '</td>' +
                 '</tr>';
         });
     }
 
-    // ---- 渲染市场情绪表 ----
     function renderEmotionTable() {
         var M = R.marketEmotion;
-        var tBody = document.querySelector('#emotionTable tbody');
-        tBody.innerHTML = '<tr>' +
-            '<td style="color:#16a34a;font-weight:bold;">' + M.upCount + '</td>' +
-            '<td style="color:#dc2626;font-weight:bold;">' + M.downCount + '</td>' +
+        var ratio = (M.upCount / M.downCount).toFixed(2);
+        document.querySelector('#emotionTable tbody').innerHTML = '<tr>' +
+            '<td style="color:#dc2626;font-weight:bold;">' + M.upCount + '</td>' +
+            '<td style="color:#16a34a;font-weight:bold;">' + M.downCount + '</td>' +
             '<td>' + M.flatCount + '</td>' +
-            '<td>' + M.upDownRatio + '</td>' +
-            '<td style="color:#dc2626;font-weight:bold;">' + M.limitUpCount + '</td>' +
-            '<td style="color:#16a34a;font-weight:bold;">' + M.limitDownCount + '</td>' +
-            '<td>' + M.upOver5Percent + '</td>' +
-            '<td>' + M.downOver5Percent + '</td>' +
+            '<td><strong>' + ratio + ':1</strong></td>' +
+            '<td style="color:#2563eb;font-weight:bold;">' + M.totalAmount.toLocaleString() + '</td>' +
             '</tr>';
     }
 
-    // ---- 渲染大盘指数走势图 ----
     function renderMarketChart() {
         var ctx = document.getElementById('marketChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['开盘', '最高', '最低', '收盘'],
-                datasets: [
-                    {
-                        label: '深证成指',
-                        data: [
-                            parseNum(R.technicalAnalysis.szComponent.open),
-                            parseNum(R.technicalAnalysis.szComponent.high),
-                            parseNum(R.technicalAnalysis.szComponent.low),
-                            parseNum(R.technicalAnalysis.szComponent.close)
-                        ],
-                        borderColor: '#2563eb',
-                        backgroundColor: 'rgba(37,99,235,0.1)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#2563eb'
-                    },
-                    {
-                        label: '创业板指',
-                        data: [
-                            parseNum(R.technicalAnalysis.cybIndex.open),
-                            parseNum(R.technicalAnalysis.cybIndex.high),
-                            parseNum(R.technicalAnalysis.cybIndex.low),
-                            parseNum(R.technicalAnalysis.cybIndex.close)
-                        ],
-                        borderColor: '#16a34a',
-                        backgroundColor: 'rgba(22,163,74,0.1)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#16a34a'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'top' },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                return ctx.dataset.label + ': ' + ctx.raw.toLocaleString();
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        ticks: { callback: function(v) { return v.toLocaleString(); } }
-                    }
-                }
-            }
-        });
-    }
-
-    // ---- 渲染行业板块涨跌幅柱状图 ----
-    function renderSectorChart() {
-        var ctx = document.getElementById('sectorChart').getContext('2d');
-        var sectors = S.sectorRiseFall || [];
-        var labels = sectors.map(function(c) { return c.name; });
-        var data = sectors.map(function(c) { return c.changeRate; });
-        var colors = data.map(function(v) { return v >= 0 ? '#dc2626' : '#16a34a'; });
-
+        var indices = R.mainIndex;
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: labels,
+                labels: indices.map(function(i) { return i.indexName; }),
                 datasets: [{
                     label: '涨跌幅(%)',
-                    data: data,
-                    backgroundColor: colors
+                    data: indices.map(function(i) { return parseNum(i.changeRate); }),
+                    backgroundColor: ['#dc2626', '#2563eb', '#16a34a']
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                return ctx.raw >= 0 ? '+' + ctx.raw.toFixed(2) + '%' : ctx.raw.toFixed(2) + '%';
-                            }
-                        }
-                    }
+                    tooltip: { callbacks: { label: function(ctx) { return (ctx.raw >= 0 ? '+' : '') + ctx.raw.toFixed(2) + '%'; } } }
                 },
-                scales: {
-                    y: { beginAtZero: true }
-                }
+                scales: { y: { beginAtZero: true } }
             }
         });
     }
 
-    // ---- 渲染板块资金流向饼图 ----
+    function renderSectorChart() {
+        var ctx = document.getElementById('sectorChart').getContext('2d');
+        var sectors = S.sectorRiseFall;
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: sectors.map(function(c) { return c.name; }),
+                datasets: [{
+                    label: '涨跌幅(%)',
+                    data: sectors.map(function(c) { return c.changeRate; }),
+                    backgroundColor: sectors.map(function(c) { return c.changeRate >= 0 ? '#dc2626' : '#16a34a'; })
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    }
+
     function renderCapitalFlowChart() {
         var ctx = document.getElementById('capitalFlowChart').getContext('2d');
-        var sectors = S.sectorRiseFall || [];
-        // 使用AI及科技板块承压数据展示资金净流出
-        var pressure = S.aiSectorPressure || [];
-        var labels = pressure.map(function(c) { return c.name; });
-        var data = pressure.map(function(c) { return Math.abs(c.capitalFlow); });
-        var rawFlows = pressure.map(function(c) { return c.capitalFlow; });
+        var inflows = S.capitalInflowTop10.slice(0, 5).map(function(s) { return s.inflow; });
+        var outflows = S.sectorOutflowTop5.map(function(s) { return Math.abs(s.capitalFlow); });
+        var labels = S.capitalInflowTop10.slice(0, 5).map(function(s) { return s.name; }).concat(S.sectorOutflowTop5.map(function(s) { return s.name; }));
+        var data = inflows.concat(outflows);
+        var colors = inflows.map(function() { return '#dc2626'; }).concat(outflows.map(function() { return '#16a34a'; }));
 
         new Chart(ctx, {
             type: 'pie',
@@ -641,102 +458,74 @@ var stockAnalysisData = {
                 datasets: [{
                     label: '主力净流入(亿)',
                     data: data,
-                    backgroundColor: ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6'],
-                    borderWidth: 2,
-                    borderColor: '#fff'
+                    backgroundColor: colors,
+                    borderWidth: 2, borderColor: '#fff'
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'right' },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                var v = rawFlows[ctx.dataIndex];
-                                return ctx.label + ': ' + (v >= 0 ? '+' : '') + v.toFixed(2) + '亿';
-                            }
-                        }
-                    }
+                    legend: { position: 'right', labels: { font: { size: 11 } } },
+                    tooltip: { callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.raw.toFixed(2) + '亿'; } } }
                 }
             }
         });
     }
 
-    // ---- 渲染主力资金TOP20表 ----
     function renderCapitalTable() {
         var tBody = document.querySelector('#capitalTable tbody');
         tBody.innerHTML = '';
-        var list = S.capitalInflowTop20 || R.capitalFlow.topInflow;
-        list.forEach(function(item) {
-            var cls = item.inflow >= 0 ? 'rise' : 'fall';
+        S.capitalInflowTop10.forEach(function(item) {
             tBody.innerHTML += '<tr>' +
                 '<td>' + item.rank + '</td>' +
-                '<td>' + item.code + '</td>' +
                 '<td><strong>' + item.name + '</strong></td>' +
-                '<td class="' + cls + '">' + (item.inflow >= 0 ? '+' : '') + item.inflow.toFixed(2) + '亿</td>' +
-                '<td class="' + (item.changeRate.indexOf('+') > -1 ? 'rise' : 'fall') + '">' + item.changeRate + '</td>' +
-                '</tr>';
+                '<td class="rise">+' + item.inflow.toFixed(2) + '亿</td>' +
+                '<td class="rise">' + item.changeRate + '</td></tr>';
         });
     }
 
-    // ---- 渲染AI重点个股表 ----
     function renderAiStocks() {
         var tBody = document.querySelector('#aiStockTable tbody');
         tBody.innerHTML = '';
         ST.aiStocks.forEach(function(st) {
             var cc = st.indicators.changeRate >= 0 ? 'stock-positive' : 'stock-negative';
             var cs = st.indicators.changeRate >= 0 ? '+' : '';
-            var mc = st.indicators.mainCapitalFlow >= 0 ? 'stock-positive' : 'stock-negative';
-            var mcs = st.indicators.mainCapitalFlow >= 0 ? '+' : '';
             tBody.innerHTML += '<tr>' +
                 '<td><strong>' + st.name + '</strong></td>' +
                 '<td>' + st.code + '</td>' +
                 '<td style="font-size:12px;text-align:left;">' + st.type + '</td>' +
-                '<td><strong>' + st.indicators.closePrice.toFixed(2) + '</strong></td>' +
+                '<td><strong>' + st.indicators.closePrice.toLocaleString('en', {minimumFractionDigits: 2}) + '</strong></td>' +
                 '<td class="' + cc + '">' + cs + st.indicators.changeRate.toFixed(2) + '%</td>' +
                 '<td>' + st.indicators.turnover.toFixed(2) + '</td>' +
-                '<td class="' + mc + '">' + mcs + st.indicators.mainCapitalFlow.toLocaleString() + '</td>' +
-                '<td class="rating">' + st.strengthRating + '</td>' +
-                '</tr>';
+                '<td class="rating">' + st.strengthRating + '</td></tr>';
         });
-
-        // 研判结论
         var cHtml = '<strong>💡 个股研判：</strong><br>';
         ST.aiStocks.forEach(function(st, i) {
             cHtml += '<div style="margin-top:8px;padding:6px;background:#fff;border-radius:4px;">' +
-                '<strong style="color:#b45309;">' + (i + 1) + '. ' + st.name + '</strong>（' + st.code + '）<br>' +
+                '<strong style="color:#b45309;">' + (i+1) + '. ' + st.name + '</strong>（' + st.code + '）<br>' +
                 '<span style="color:#666;font-size:13px;">' + st.conclusion + '</span></div>';
         });
         document.getElementById('aiStockConclusion').innerHTML = cHtml;
     }
 
-    // ---- 渲染电子化学品/金属新材料板块个股表 ----
     function renderSemiconductorTable() {
         var tBody = document.querySelector('#semiconductorTable tbody');
         tBody.innerHTML = '';
-        var list = S.semiconductorStocks || [];
-        list.forEach(function(item) {
+        S.semiconductorStocks.forEach(function(item) {
             var ch = parseNum(item.changeRate);
             var cls = ch >= 0 ? 'rise' : 'fall';
-            tBody.innerHTML += '<tr>' +
-                '<td>' + item.code + '</td>' +
-                '<td><strong>' + item.name + '</strong></td>' +
-                '<td class="' + cls + '">' + item.changeRate + '</td>' +
-                '<td>' + item.sector + '</td>' +
-                '<td style="font-size:11px;text-align:left;">' + item.concepts + '</td>' +
-                '</tr>';
+            tBody.innerHTML += '<tr><td>' + item.code + '</td><td><strong>' + item.name + '</strong></td>' +
+                '<td class="' + cls + '">' + item.changeRate + '</td><td>' + item.sector + '</td>' +
+                '<td style="font-size:11px;text-align:left;">' + item.concepts + '</td></tr>';
         });
     }
 
-    // ---- 渲染操作建议 ----
     function renderOperationAdvice() {
         var adv = ST.operationAdvice;
         var sen = ST.marketSentiment;
         var sc = ST.calculateSentimentScore();
         var h = '';
-        h += '<div class="advice-item"><strong>📊 市场情绪评分：</strong><span style="color:' + (sc >= 6 ? '#16a34a' : '#dc2626') + ';font-weight:bold;font-size:18px;">' + sc + '分</span>（满分10分）| 涨跌比 ' + sen.riseStocks + ':' + sen.fallStocks + ' | 涨停 ' + sen.limitUp + ' 家 | 跌停 ' + sen.limitDown + ' 家</div>';
+        h += '<div class="advice-item"><strong>📊 市场情绪评分：</strong><span style="color:#16a34a;font-weight:bold;font-size:18px;">' + sc + '分</span>（满分10分）| 涨跌比 ' + (sen.riseStocks/sen.fallStocks).toFixed(2) + ':1 | 两市成交 ' + sen.totalAmount.toLocaleString() + '亿</div>';
         h += '<div class="advice-item"><strong>🎯 仓位控制：</strong>' + adv.positionControl + '</div>';
         h += '<div class="advice-item"><strong>🛡️ 防御重点：</strong>' + adv.defenseFocus + '</div>';
         h += '<div class="advice-item"><strong>🤖 AI个股策略：</strong>' + adv.aiStockStrategy + '</div>';
@@ -744,99 +533,63 @@ var stockAnalysisData = {
         document.getElementById('operationAdvice').innerHTML = h;
     }
 
-    // ---- 渲染强势个股TOP10 ----
     function renderStrongStocks() {
         var tBody = document.querySelector('#stockTable tbody');
         tBody.innerHTML = '';
-        var list = S.strongStocks || [];
-        list.forEach(function(st) {
-            tBody.innerHTML += '<tr>' +
-                '<td>' + st.rank + '</td>' +
-                '<td><strong>' + st.name + '</strong></td>' +
-                '<td>' + st.code + '</td>' +
-                '<td>' + st.latestPrice + '</td>' +
+        S.strongStocks.forEach(function(st) {
+            tBody.innerHTML += '<tr><td>' + st.rank + '</td><td><strong>' + st.name + '</strong></td>' +
+                '<td>' + st.code + '</td><td>' + st.latestPrice + '</td>' +
                 '<td class="rise" style="font-weight:bold;">' + st.riseFall + '</td>' +
-                '<td style="font-size:11px;text-align:left;max-width:280px;overflow:hidden;text-overflow:ellipsis;">' + st.concept + '</td>' +
-                '</tr>';
+                '<td style="font-size:11px;text-align:left;max-width:280px;">' + st.concept + '</td></tr>';
         });
     }
 
-    // ---- 渲染热门板块动向表 ----
     function renderLimitUpTable() {
         var tBody = document.querySelector('#limitUpTable tbody');
         tBody.innerHTML = '';
-        var list = S.limitUpReasons || [];
-        list.forEach(function(item) {
-            tBody.innerHTML += '<tr>' +
-                '<td>' + item.rank + '</td>' +
-                '<td><strong>' + item.name + '</strong></td>' +
-                '<td class="rise">' + item.changeRate + '</td>' +
-                '<td>' + item.leader + '</td>' +
-                '</tr>';
+        S.limitUpReasons.forEach(function(item) {
+            tBody.innerHTML += '<tr><td>' + item.rank + '</td><td><strong>' + item.name + '</strong></td>' +
+                '<td style="font-size:12px;">' + item.leader + '</td><td style="font-size:12px;">' + item.driver + '</td></tr>';
         });
     }
 
-    // ---- 构建综合报告HTML ----
     function buildReportHTML() {
-        var O = R.overallAnalysis;
-        var M = R.marketEmotion;
         var html = '';
-
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">📊 市场情绪分析</h4>';
-        html += '<p>' + M.conclusion + '</p>';
-
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">📈 技术面分析</h4>';
-        R.technicalAnalysis.conclusion.forEach(function(c) {
-            html += '<p>• ' + c + '</p>';
-        });
-
+        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">📊 大盘行情综述</h4>';
+        html += '<p>' + R.marketEmotion.conclusion + '</p>';
         html += '<h4 style="color:#0f2862;margin:12px 0 8px;">🔥 热门板块动向</h4>';
-        html += '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0;"><thead><tr style="background:#eff6ff;color:#0f2862;"><th>排名</th><th>概念板块</th><th>代表股</th><th>涨幅</th></tr></thead><tbody>';
-        R.hotSections.conceptSections.forEach(function(item) {
-            html += '<tr><td>' + item.rank + '</td><td><strong>' + item.name + '</strong></td><td>' + item.stock + '</td><td class="rise">' + item.changeRate + '</td></tr>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0;"><thead><tr style="background:#eff6ff;color:#0f2862;"><th>排名</th><th>板块</th><th>涨幅</th><th>主力净流入</th></tr></thead><tbody>';
+        S.sectorRiseFall.slice(0,5).forEach(function(s,i) {
+            var inf = S.capitalInflowTop10.find(function(c) { return c.name === s.name; });
+            html += '<tr><td>' + (i+1) + '</td><td><strong>' + s.name + '</strong></td><td class="rise">+' + s.changeRate.toFixed(2) + '%</td><td>' + (inf ? '+' + inf.inflow.toFixed(2) + '亿' : '-') + '</td></tr>';
         });
         html += '</tbody></table>';
-
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">💰 资金流向特征</h4><ul>';
-        R.capitalFlow.conclusion.forEach(function(c) {
-            html += '<li>' + c + '</li>';
+        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">💸 资金流出方向</h4>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0;"><thead><tr style="background:#fef2f2;color:#991b1b;"><th>板块</th><th>跌幅</th><th>主力净流出</th></tr></thead><tbody>';
+        S.sectorOutflowTop5.forEach(function(s) {
+            html += '<tr><td><strong>' + s.name + '</strong></td><td class="fall">' + s.changeRate.toFixed(2) + '%</td><td class="fall">' + s.capitalFlow.toFixed(2) + '亿</td></tr>';
         });
-        html += '</ul>';
-
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">🎯 操作建议</h4><ul>';
-        O.operationSuggestion.forEach(function(s) {
-            html += '<li>' + s + '</li>';
-        });
-        html += '</ul>';
-
-        html += '<hr style="margin:12px 0;border:none;border-top:1px dashed #ccc;">';
+        html += '</tbody></table>';
         html += '<h4 style="color:#0f2862;margin:12px 0 8px;">🤖 AI板块重点个股摘要</h4>';
         ST.aiStocks.forEach(function(st, i) {
-            html += '<p><strong>' + (i + 1) + '. ' + st.name + '（' + st.code + '）</strong> — ' + st.conclusion + '</p>';
+            html += '<p><strong>' + (i+1) + '. ' + st.name + '（' + st.code + '）</strong> ' + st.strengthRating + ' — ' + st.conclusion + '</p>';
         });
-
         html += '<hr style="margin:12px 0;border:none;border-top:1px dashed #ccc;">';
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">📋 行业板块涨幅TOP5</h4><ul>';
-        S.sectorRiseFall.slice(0, 5).forEach(function(s) {
-            html += '<li><strong>' + s.name + '</strong>：+' + s.changeRate.toFixed(2) + '%</li>';
-        });
+        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">🎯 操作建议</h4><ul>';
+        R.overallAnalysis.operationSuggestion.forEach(function(s) { html += '<li>' + s + '</li>'; });
         html += '</ul>';
-
         html += '<hr style="margin:12px 0;border:none;border-top:1px dashed #ccc;">';
         html += '<p style="background:#fef3c7;padding:12px;border-radius:6px;font-weight:bold;color:#92400e;"><strong>📋 核心摘要：</strong>' + R.getSummary() + '</p>';
-
         html += '<hr style="margin:12px 0;border:none;border-top:1px dashed #ccc;">';
         html += '<p style="font-size:12px;color:#666;"><strong>数据来源：</strong>' + R.basicInfo.dataSource + '<br><strong>生成平台：</strong>' + R.basicInfo.platform + '<br><strong>更新时间：</strong>' + R.basicInfo.generateTime + '</p>';
-
         return html;
     }
 
     // ---- 交互逻辑 ----
     var isDark = false;
-    var currentFilter = 'none'; // none | rise | fall
-    var sortState = {}; // tableId -> 'asc' | 'desc'
+    var currentFilter = 'none';
+    var sortState = {};
 
-    // 深色模式
     document.getElementById('btnDarkMode').addEventListener('click', function() {
         isDark = !isDark;
         document.body.classList.toggle('dark', isDark);
@@ -845,135 +598,76 @@ var stockAnalysisData = {
         showToast(isDark ? '深色模式已开启' : '浅色模式已开启');
     });
 
-    // 筛选逻辑（修复版：只筛选个股表格，不筛选板块分析员数据）
     function applyFilter(filter) {
         currentFilter = filter;
-        // 只筛选个股相关表格，排除板块分析员的资金/板块表格
         var rows = document.querySelectorAll('#stockTable tbody tr, #aiStockTable tbody tr');
         rows.forEach(function(row) {
             var show = true;
             if (filter !== 'none') {
-                // 跳过标记为 data-no-filter 的表格（板块分析员数据）
-                if (row.closest('table[data-no-filter]')) {
-                    show = true;
-                } else {
-                    // 涨跌幅/涨幅列在表格第5列（index=4）
+                if (row.closest('table[data-no-filter]')) { show = true; }
+                else {
                     var changeCell = row.cells[4];
-                if (changeCell) {
-                    var cls = changeCell.className || '';
-                    var isRise = cls.indexOf('rise') > -1 || cls.indexOf('stock-positive') > -1;
-                    var isFall = cls.indexOf('fall') > -1 || cls.indexOf('stock-negative') > -1;
-                    if (filter === 'rise') show = isRise;
-                    if (filter === 'fall') show = isFall;
-                } else {
-                    show = false;
+                    if (changeCell) {
+                        var cls = changeCell.className || '';
+                        var isRise = cls.indexOf('rise') > -1 || cls.indexOf('stock-positive') > -1;
+                        var isFall = cls.indexOf('fall') > -1 || cls.indexOf('stock-negative') > -1;
+                        if (filter === 'rise') show = isRise;
+                        if (filter === 'fall') show = isFall;
+                    } else { show = false; }
                 }
-                } // end else (非 no-filter 表格)
             }
             row.style.display = show ? '' : 'none';
         });
-        // 更新按钮状态
-        ['btnRiseFilter','btnFallFilter','btnClearFilter'].forEach(function(id) {
-            document.getElementById(id).classList.remove('active','active2');
-        });
+        ['btnRiseFilter','btnFallFilter','btnClearFilter'].forEach(function(id) { document.getElementById(id).classList.remove('active','active2'); });
         if (filter === 'rise') document.getElementById('btnRiseFilter').classList.add('active2');
         if (filter === 'fall') document.getElementById('btnFallFilter').classList.add('active');
-        var fi = document.getElementById('filterInfo');
-        fi.textContent = filter === 'none' ? '' : '当前筛选：' + (filter === 'rise' ? '📈 只显示上涨' : '📉 只显示下跌');
+        document.getElementById('filterInfo').textContent = filter === 'none' ? '' : '当前筛选：' + (filter === 'rise' ? '📈 只显示上涨' : '📉 只显示下跌');
     }
 
-    document.getElementById('btnRiseFilter').addEventListener('click', function() {
-        applyFilter(currentFilter === 'rise' ? 'none' : 'rise');
-    });
-    document.getElementById('btnFallFilter').addEventListener('click', function() {
-        applyFilter(currentFilter === 'fall' ? 'none' : 'fall');
-    });
-    document.getElementById('btnClearFilter').addEventListener('click', function() {
-        applyFilter('none');
-    });
+    document.getElementById('btnRiseFilter').addEventListener('click', function() { applyFilter(currentFilter === 'rise' ? 'none' : 'rise'); });
+    document.getElementById('btnFallFilter').addEventListener('click', function() { applyFilter(currentFilter === 'fall' ? 'none' : 'fall'); });
+    document.getElementById('btnClearFilter').addEventListener('click', function() { applyFilter('none'); });
 
-    // 表格排序
     function sortTable(tableId, colIndex, isNumeric) {
         var table = document.getElementById(tableId);
         var tbody = table.querySelector('tbody');
         var rows = Array.from(tbody.querySelectorAll('tr'));
         var dir = sortState[tableId] === 'asc' ? 'desc' : 'asc';
         sortState[tableId] = dir;
-
         rows.sort(function(a, b) {
             var va = a.cells[colIndex].textContent.trim();
             var vb = b.cells[colIndex].textContent.trim();
-            if (isNumeric) {
-                va = parseFloat(va.replace(/[^0-9.-]/g, '')) || 0;
-                vb = parseFloat(vb.replace(/[^0-9.-]/g, '')) || 0;
-            }
+            if (isNumeric) { va = parseFloat(va.replace(/[^0-9.-]/g, '')) || 0; vb = parseFloat(vb.replace(/[^0-9.-]/g, '')) || 0; }
             if (va < vb) return dir === 'asc' ? -1 : 1;
             if (va > vb) return dir === 'asc' ? 1 : -1;
             return 0;
         });
-
         rows.forEach(function(r) { tbody.appendChild(r); });
-        // 更新表头样式
-        table.querySelectorAll('th.sortable').forEach(function(th) {
-            th.classList.remove('sort-asc','sort-desc');
-        });
-        var header = table.querySelectorAll('th.sortable')[colIndex > 0 ? colIndex - 1 : 0];
-        if (header) {
-            header.classList.remove('sort-asc','sort-desc');
-            header.classList.add(dir === 'asc' ? 'sort-asc' : 'sort-desc');
-        }
     }
 
-    document.getElementById('btnSortRank').addEventListener('click', function() {
-        sortTable('stockTable', 0, true);
-        this.classList.toggle('active');
-        showToast('强势个股已按排名排序');
-    });
-    document.getElementById('btnSortChange').addEventListener('click', function() {
-        sortTable('stockTable', 4, true);
-        this.classList.toggle('active');
-        showToast('强势个股已按涨跌幅排序');
-    });
-    document.getElementById('btnSortInflow').addEventListener('click', function() {
-        sortTable('capitalTable', 3, true);
-        this.classList.toggle('active');
-        showToast('资金净流入已按金额排序');
-    });
+    document.getElementById('btnSortRank').addEventListener('click', function() { sortTable('stockTable', 0, true); showToast('强势个股已按排名排序'); });
+    document.getElementById('btnSortChange').addEventListener('click', function() { sortTable('stockTable', 4, true); showToast('强势个股已按涨跌幅排序'); });
+    document.getElementById('btnSortInflow').addEventListener('click', function() { sortTable('capitalTable', 2, true); showToast('资金净流入已按金额排序'); });
 
-    // 折叠/展开
     var collapsed = false;
     document.getElementById('btnCollapseAll').addEventListener('click', function() {
         collapsed = !collapsed;
-        document.querySelectorAll('.card').forEach(function(card) {
-            card.classList.toggle('collapsed', collapsed);
-        });
+        document.querySelectorAll('.card').forEach(function(card) { card.classList.toggle('collapsed', collapsed); });
         this.textContent = collapsed ? '🔼 展开全部' : '🔽 折叠全部';
         showToast(collapsed ? '已折叠所有板块' : '已展开所有板块');
     });
 
-    // 导出报告
     document.getElementById('btnExport').addEventListener('click', function() {
-        var date = marketAnalysisReport.basicInfo.date;
-        var summary = marketAnalysisReport.getSummary();
-        var report = document.getElementById('reportBox').innerText;
+        var date = R.basicInfo.date;
+        var summary = R.getSummary();
         var text = '【A股每日智能分析报告】\n' + '═'.repeat(40) + '\n' +
-            '报告日期：' + date + '\n' +
-            '═'.repeat(40) + '\n\n' +
-            '【大盘走势】\n' +
-            '深证成指：' + marketAnalysisReport.mainIndex[0].closePrice + ' (' + marketAnalysisReport.mainIndex[0].changeRate + ')\n' +
-            '创业板指：' + marketAnalysisReport.mainIndex[1].closePrice + ' (' + marketAnalysisReport.mainIndex[1].changeRate + ')\n' +
-            '市场情绪：涨跌比 ' + marketAnalysisReport.marketEmotion.upDownRatio + ' | 涨停 ' + marketAnalysisReport.marketEmotion.limitUpCount + ' | 跌停 ' + marketAnalysisReport.marketEmotion.limitDownCount + '\n\n' +
-            '【AI板块重点个股】\n';
-        stockAnalysisData.aiStocks.forEach(function(s, i) {
-            text += (i+1) + '. ' + s.name + '（' + s.code + '）收盘价 ' + s.indicators.closePrice + ' 涨跌幅 ' + (s.indicators.changeRate >= 0 ? '+' : '') + s.indicators.changeRate + '%\n';
-        });
-        text += '\n【操作建议】\n';
-        Object.values(stockAnalysisData.operationAdvice).forEach(function(a) {
-            text += '• ' + a + '\n';
-        });
+            '报告日期：' + date + '\n' + '═'.repeat(40) + '\n\n' +
+            '【大盘走势】\n';
+        R.mainIndex.forEach(function(i) { text += i.indexName + '：' + i.closePrice + ' (' + i.changeRate + ')\n'; });
+        text += '两市成交额：' + R.marketEmotion.totalAmount + '亿\n\n【AI板块重点个股】\n';
+        ST.aiStocks.forEach(function(s, i) { text += (i+1) + '. ' + s.name + ' ' + s.strengthRating + ' ' + (s.indicators.changeRate>=0?'+':'') + s.indicators.changeRate.toFixed(2) + '% 成交' + s.indicators.turnover.toFixed(2) + '亿\n'; });
+        text += '\n【操作建议】\n' + ST.operationAdvice.positionControl + '\n' + ST.operationAdvice.aiStockStrategy + '\n';
         text += '\n【核心摘要】\n' + summary + '\n';
-        text += '\n' + '═'.repeat(40) + '\n数据来源：' + marketAnalysisReport.basicInfo.dataSource + '\n平台：' + marketAnalysisReport.basicInfo.platform;
-
         var blob = new Blob(['\uFEFF' + text], { type: 'text/plain;charset=utf-8' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
@@ -982,51 +676,27 @@ var stockAnalysisData = {
         showToast('报告已导出！');
     });
 
-    // Toast提示
     function showToast(msg) {
         var t = document.getElementById('toastEl');
-        if (!t) {
-            t = document.createElement('div');
-            t.id = 'toastEl';
-            t.className = 'toast';
-            document.body.appendChild(t);
-        }
-        t.textContent = msg;
-        t.classList.add('show');
-        clearTimeout(t._timer);
-        t._timer = setTimeout(function() { t.classList.remove('show'); }, 2200);
+        if (!t) { t = document.createElement('div'); t.id = 'toastEl'; t.className = 'toast'; document.body.appendChild(t); }
+        t.textContent = msg; t.classList.add('show');
+        clearTimeout(t._timer); t._timer = setTimeout(function() { t.classList.remove('show'); }, 2200);
     }
 
-    // ---- 主入口 ----
     function loadAll() {
-        renderMarketTable();
-        renderEmotionTable();
-        renderMarketChart();
-        renderSectorChart();
-        renderCapitalFlowChart();
-        renderCapitalTable();
-        renderAiStocks();
-        renderSemiconductorTable();
-        renderOperationAdvice();
-        renderStrongStocks();
-        renderLimitUpTable();
+        renderMarketTable(); renderEmotionTable(); renderMarketChart();
+        renderSectorChart(); renderCapitalFlowChart(); renderCapitalTable();
+        renderAiStocks(); renderSemiconductorTable(); renderOperationAdvice();
+        renderStrongStocks(); renderLimitUpTable();
         document.getElementById('reportBox').innerHTML = buildReportHTML();
-        // 加载完成后为关键列头添加可排序样式
         ['stockTable','capitalTable','aiStockTable'].forEach(function(tid) {
-            var ths = document.querySelectorAll('#' + tid + ' thead th');
-            ths.forEach(function(th) { th.classList.add('sortable'); });
+            document.querySelectorAll('#' + tid + ' thead th').forEach(function(th) { th.classList.add('sortable'); });
         });
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadAll);
-    } else {
-        loadAll();
-    }
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', loadAll); } else { loadAll(); }
 })();
 </script>
-
-<!-- Toast 提示元素 -->
 <div class="toast" id="toastEl"></div>
 </body>
 </html>
