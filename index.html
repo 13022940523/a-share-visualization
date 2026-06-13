@@ -43,24 +43,9 @@
         .toolbar-btn:active { transform: translateY(0); }
         .btn-dark { background: #1e293b; color: #e2e8f0; }
         .btn-dark.active { background: #3b82f6; color: #fff; }
-        .btn-filter { background: #f1f5f9; color: #475569; }
-        .btn-filter.active { background: #dc2626; color: #fff; }
-        .btn-filter.active2 { background: #16a34a; color: #fff; }
         .btn-export { background: #f59e0b; color: #fff; }
-        .btn-sort { background: #e2e8f0; color: #475569; }
-        .btn-sort.active { background: #7c3aed; color: #fff; }
-        .btn-collapse { background: #e2e8f0; color: #475569; }
         body.dark .btn-dark { background: #334155; color: #e2e8f0; }
-        body.dark .btn-filter { background: #334155; color: #cbd5e1; }
-        body.dark .btn-sort { background: #334155; color: #cbd5e1; }
         body.dark .btn-export { background: #d97706; }
-        body.dark .btn-collapse { background: #334155; color: #cbd5e1; }
-        .filter-info { font-size: 12px; color: #888; margin-bottom: 8px; }
-        body.dark .filter-info { color: #94a3b8; }
-        .card.collapsed .card-body { display: none; }
-        .card-toggle { float: right; cursor: pointer; font-size: 18px; user-select: none; }
-        .card-toggle:hover { color: #2563eb; }
-        body.dark .card-toggle:hover { color: #60a5fa; }
         th.sortable { cursor: pointer; position: relative; user-select: none; }
         th.sortable:hover { background-color: #dbeafe !important; }
         body.dark th.sortable:hover { background-color: #1e3a5f !important; }
@@ -107,16 +92,8 @@
     </header>
     <div class="toolbar">
         <button class="toolbar-btn btn-dark" id="btnDarkMode">🌙 深色模式</button>
-        <button class="toolbar-btn btn-filter" id="btnRiseFilter">📈 只看上涨</button>
-        <button class="toolbar-btn btn-filter" id="btnFallFilter">📉 只看下跌</button>
-        <button class="toolbar-btn btn-filter" id="btnClearFilter">🔄 显示全部</button>
-        <button class="toolbar-btn btn-sort" id="btnSortRank">🔢 按排名排序</button>
-        <button class="toolbar-btn btn-sort" id="btnSortChange">📊 按涨跌幅排序</button>
-        <button class="toolbar-btn btn-sort" id="btnSortInflow">💰 按资金排序</button>
-        <button class="toolbar-btn btn-collapse" id="btnCollapseAll">🔽 折叠全部</button>
         <button class="toolbar-btn btn-export" id="btnExport">📥 导出报告</button>
     </div>
-    <div class="filter-info" id="filterInfo"></div>
     <div class="data-source-note">
         数据来源：大盘分析（大盘行情分析_20260612.md）| 板块分析（A股热门板块分析_2026-06-12.md）| 个股分析（A股每日市场分析报告_20260612.md）| 数据截止日期：2026年6月12日（星期五）
     </div>
@@ -478,58 +455,11 @@ var stockAnalysisData = {
     }
 
     var isDark = false;
-    var currentFilter = 'none';
-    var sortState = {};
 
     document.getElementById('btnDarkMode').addEventListener('click', function() {
         isDark = !isDark;
         document.body.classList.toggle('dark', isDark);
         this.textContent = isDark ? '☀️ 浅色模式' : '🌙 深色模式';
-    });
-
-    function applyFilter(filter) {
-        currentFilter = filter;
-        document.querySelectorAll('#stockTable tbody tr, #aiStockTable tbody tr').forEach(function(row) {
-            var show = true;
-            if (filter !== 'none' && !row.closest('table[data-no-filter]')) {
-                var cell = row.cells[4];
-                if (cell) {
-                    var cls = cell.className;
-                    if (filter === 'rise') show = cls.indexOf('rise') > -1 || cls.indexOf('stock-positive') > -1;
-                    if (filter === 'fall') show = cls.indexOf('fall') > -1 || cls.indexOf('stock-negative') > -1;
-                }
-            }
-            row.style.display = show ? '' : 'none';
-        });
-        document.getElementById('filterInfo').textContent = filter === 'none' ? '' : '当前筛选：' + (filter === 'rise' ? '只显示上涨' : '只显示下跌');
-    }
-
-    document.getElementById('btnRiseFilter').addEventListener('click', function(){applyFilter(currentFilter==='rise'?'none':'rise');});
-    document.getElementById('btnFallFilter').addEventListener('click', function(){applyFilter(currentFilter==='fall'?'none':'fall');});
-    document.getElementById('btnClearFilter').addEventListener('click', function(){applyFilter('none');});
-
-    function sortTable(tid, col, num) {
-        var tbody = document.getElementById(tid).querySelector('tbody');
-        var rows = Array.from(tbody.querySelectorAll('tr'));
-        var dir = sortState[tid]==='asc'?'desc':'asc';
-        sortState[tid] = dir;
-        rows.sort(function(a,b){
-            var va=a.cells[col].textContent.trim(), vb=b.cells[col].textContent.trim();
-            if(num){va=parseFloat(va.replace(/[^0-9.-]/g,''))||0;vb=parseFloat(vb.replace(/[^0-9.-]/g,''))||0;}
-            return va<vb?(dir==='asc'?-1:1):va>vb?(dir==='asc'?1:-1):0;
-        });
-        rows.forEach(function(r){tbody.appendChild(r);});
-    }
-
-    document.getElementById('btnSortRank').addEventListener('click',function(){sortTable('stockTable',0,true);});
-    document.getElementById('btnSortChange').addEventListener('click',function(){sortTable('stockTable',4,true);});
-    document.getElementById('btnSortInflow').addEventListener('click',function(){sortTable('capitalTable',2,true);});
-
-    var collapsed = false;
-    document.getElementById('btnCollapseAll').addEventListener('click', function() {
-        collapsed = !collapsed;
-        document.querySelectorAll('.card').forEach(function(c){c.classList.toggle('collapsed',collapsed);});
-        this.textContent = collapsed ? '🔼 展开全部' : '🔽 折叠全部';
     });
 
     document.getElementById('btnExport').addEventListener('click', function() {
