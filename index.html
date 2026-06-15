@@ -30,7 +30,9 @@
         body.dark .report-content { background: #1e2a4a; }
         body.dark .report-content h4 { color: #93c5fd; }
         body.dark .report-content hr { border-color: #334155; }
+        body.dark .report-content p[style*="background"] { background: #2a1a00; color: #fbbf24; }
         body.dark thead tr { background: #1e3a5f; }
+        body.dark .grid-row { gap: 16px; }
         body.dark table { color: #e0e0e0; }
         body.dark td { color: #cbd5e1; }
         body.dark .rise { color: #f87171; }
@@ -43,13 +45,32 @@
         .toolbar-btn:active { transform: translateY(0); }
         .btn-dark { background: #1e293b; color: #e2e8f0; }
         .btn-dark.active { background: #3b82f6; color: #fff; }
+        .btn-filter { background: #f1f5f9; color: #475569; }
+        .btn-filter.active { background: #dc2626; color: #fff; }
+        .btn-filter.active2 { background: #16a34a; color: #fff; }
         .btn-export { background: #f59e0b; color: #fff; }
+        .btn-sort { background: #e2e8f0; color: #475569; }
+        .btn-sort.active { background: #7c3aed; color: #fff; }
+        .btn-collapse { background: #e2e8f0; color: #475569; }
         body.dark .btn-dark { background: #334155; color: #e2e8f0; }
+        body.dark .btn-filter { background: #334155; color: #cbd5e1; }
+        body.dark .btn-sort { background: #334155; color: #cbd5e1; }
         body.dark .btn-export { background: #d97706; }
+        body.dark .btn-collapse { background: #334155; color: #cbd5e1; }
+        .filter-info { font-size: 12px; color: #888; margin-bottom: 8px; }
+        body.dark .filter-info { color: #94a3b8; }
+        .card.collapsed .card-body { display: none; }
+        .card-toggle { float: right; cursor: pointer; font-size: 18px; user-select: none; }
+        .card-toggle:hover { color: #2563eb; }
+        body.dark .card-toggle:hover { color: #60a5fa; }
         th.sortable { cursor: pointer; position: relative; user-select: none; }
         th.sortable:hover { background-color: #dbeafe !important; }
         body.dark th.sortable:hover { background-color: #1e3a5f !important; }
-        th.sortable::after { content: ' \u2195'; font-size: 11px; opacity: 0.4; }
+        th.sortable::after { content: ' \2195'; font-size: 11px; opacity: 0.4; }
+        th.sort-asc::after { content: ' ▲'; opacity: 1; color: #2563eb; }
+        th.sort-desc::after { content: ' ▼'; opacity: 1; color: #dc2626; }
+        body.dark th.sort-asc::after { color: #60a5fa; }
+        body.dark th.sort-desc::after { color: #f87171; }
         .toast { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
         .toast.show { opacity: 1; }
         body.dark .toast { background: #3b82f6; }
@@ -87,184 +108,239 @@
 <body>
 <div class="container">
     <header>
-        <h1>A股每日智能分析平台</h1>
+        <h1>&#x1F4CA; A股每日智能分析平台</h1>
         <p class="update-time" id="updateTime">数据加载中... <span style="font-size:11px;color:#999;" id="versionTag">v20260612</span></p>
     </header>
+
     <div class="toolbar">
-        <button class="toolbar-btn btn-dark" id="btnDarkMode">🌙 深色模式</button>
-        <button class="toolbar-btn btn-export" id="btnExport">📥 导出报告</button>
+        <button class="toolbar-btn btn-dark" id="btnDarkMode" title="切换深色模式">&#x1F319; 深色模式</button>
+        <button class="toolbar-btn btn-filter" id="btnRiseFilter" title="只看上涨个股">&#x1F4C8; 只看上涨</button>
+        <button class="toolbar-btn btn-filter" id="btnFallFilter" title="只看下跌个股">&#x1F4C9; 只看下跌</button>
+        <button class="toolbar-btn btn-filter" id="btnClearFilter" title="显示全部">&#x1F504; 显示全部</button>
+        <button class="toolbar-btn btn-sort" id="btnSortRank" title="按涨跌幅排序">&#x1F522; 按排名排序</button>
+        <button class="toolbar-btn btn-sort" id="btnSortChange" title="按涨跌幅排序">&#x1F4CA; 按涨跌幅排序</button>
+        <button class="toolbar-btn btn-sort" id="btnSortInflow" title="按资金净流入排序">&#x1F4B0; 按资金排序</button>
+        <button class="toolbar-btn btn-collapse" id="btnCollapseAll" title="折叠/展开全部">&#x1F53D; 折叠全部</button>
+        <button class="toolbar-btn btn-export" id="btnExport" title="导出分析报告">&#x1F4E5; 导出报告</button>
         <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
-            <label for="dateSelector" style="font-size:13px;color:#666;font-weight:500;">📅 历史报告：</label>
+            <label for="dateSelector" style="font-size:13px;color:#666;font-weight:500;">&#x1F4C5; 历史报告：</label>
             <select id="dateSelector" style="padding:5px 10px;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:Microsoft YaHei,sans-serif;cursor:pointer;background:#fff;color:#333;min-width:120px;">
                 <option value="">加载中...</option>
             </select>
         </div>
     </div>
+    <div class="filter-info" id="filterInfo"></div>
+
     <div class="data-source-note">
-        数据来源：大盘分析（大盘行情分析_20260612.md）| 板块分析（A股热门板块分析_2026-06-12.md）| 个股分析（A股每日市场分析报告_20260612.md）| 数据截止日期：2026年6月12日（星期五）
+        &#x26A0; <strong>数据来源：</strong>大盘分析（大盘行情分析_20260612.md）｜板块分析（A股热门板块分析_2026-06-12.md）｜个股分析（A股每日市场分析报告_20260613.md）｜数据截止日期：2026年6月12日（星期五）
     </div>
+
     <div class="grid-row">
         <div class="card">
-            <h3>📈 大盘指数走势（大盘分析员）</h3>
+            <h3>&#x1F4C8; 大盘指数走势（大盘分析员）</h3>
             <div class="chart-box"><canvas id="marketChart"></canvas></div>
         </div>
         <div class="card">
-            <h3>📋 大盘指数明细</h3>
+            <h3>&#x1F4CB; 大盘指数明细</h3>
             <table id="marketTable">
                 <thead><tr><th>指数名称</th><th>收盘价</th><th>涨跌幅</th><th>成交额(亿)</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
     </div>
+
     <div class="card" style="margin-top:20px;">
-        <h3>📊 市场情绪概览</h3>
+        <h3>&#x1F4CA; 市场情绪概览</h3>
         <table id="emotionTable">
             <thead><tr><th>上涨家数</th><th>下跌家数</th><th>平盘家数</th><th>涨跌比</th><th>两市成交额(亿)</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
+
     <div class="grid-row">
         <div class="card">
-            <h3>🔥 热门板块涨跌幅（板块分析员）</h3>
+            <h3>&#x1F525; 行业板块涨跌幅TOP10（板块分析员）</h3>
             <div class="chart-box"><canvas id="sectorChart"></canvas></div>
         </div>
         <div class="card">
-            <h3>💰 板块资金流向（板块分析员）</h3>
+            <h3>&#x1F4B0; 板块资金流向（板块分析员）</h3>
             <div class="chart-box"><canvas id="capitalFlowChart"></canvas></div>
         </div>
     </div>
+
     <div class="card" style="margin-top:20px;">
-        <h3>💰 主力资金净流入TOP10板块</h3>
+        <h3>&#x1F4B0; 主力资金净流入TOP10板块（板块分析员）</h3>
         <table id="capitalTable" data-no-filter="true">
             <thead><tr><th>排名</th><th>板块名称</th><th>净流入(亿)</th><th>涨跌幅</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
+
     <div class="card ai-stock-card" style="margin-top:20px;">
-        <h3>🤖 AI板块重点个股分析（个股分析员）</h3>
+        <h3>&#x1F916; AI板块重点个股分析（个股分析员）</h3>
         <table class="ai-stock-table" id="aiStockTable">
             <thead><tr><th>股票名称</th><th>代码</th><th>概念定位</th><th>收盘价</th><th>涨跌幅</th><th>成交额(亿)</th><th>评级</th></tr></thead>
             <tbody></tbody>
         </table>
         <div class="conclusion-box" id="aiStockConclusion"></div>
     </div>
+
     <div class="card" style="margin-top:20px;">
-        <h3>💎 半导体板块重点个股（板块分析员）</h3>
+        <h3>&#x1F48E; 半导体板块重点个股（板块分析员）</h3>
         <table id="semiconductorTable" data-no-filter="true">
-            <thead><tr><th>代码</th><th>名称</th><th>涨跌幅</th><th>所属板块</th><th>概念标签</th></tr></thead>
+            <thead><tr><th>代码</th><th>名称</th><th>涨跌幅</th><th>换手率</th><th>量比</th><th>主力净流入</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
+
+    <div class="card" style="margin-top:20px;">
+        <h3>&#x1F525; 概念板块热点TOP10</h3>
+        <table id="conceptTable">
+            <thead><tr><th>排名</th><th>概念板块</th><th>涨跌幅</th><th>主力净流入(亿)</th><th>涨停数</th><th>涨/跌家数</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
     <div class="card advice-card" style="margin-top:20px;">
-        <h3>📋 操作建议与风险提示</h3>
+        <h3>&#x1F4CB; 操作建议与风险提示</h3>
         <div id="operationAdvice"></div>
     </div>
+
     <div class="card" style="margin-top:20px;">
-        <h3>🔥 今日强势个股TOP10</h3>
+        <h3>&#x1F525; 今日强势个股TOP10</h3>
         <table id="stockTable">
             <thead><tr><th>排名</th><th>名称</th><th>代码</th><th>最新价</th><th>涨幅</th><th>所属概念</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
+
     <div class="card" style="margin-top:20px;">
-        <h3>📌 涨停主线与板块动向</h3>
+        <h3>&#x1F4CC; 涨停主线与板块动向（板块分析员）</h3>
         <table id="limitUpTable">
             <thead><tr><th>排名</th><th>主线方向</th><th>代表涨停股</th><th>涨停驱动</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
+
     <div class="report-card">
-        <h3>📄 三大Agent综合分析报告</h3>
+        <h3>&#x1F4C4; 三大Agent综合分析报告</h3>
         <div class="report-content" id="reportBox">报告加载中...</div>
     </div>
 </div>
+
 <script>
+// ============================================================
+// 2026-06-12 数据（整合大盘+板块+个股三份报告）
+// ============================================================
 var marketAnalysisReport = {
     basicInfo: {
         date: '2026年6月12日（星期五）',
-        generateTime: '2026-06-14 06:02',
+        generateTime: '2026-06-15 13:04',
         dataSource: '东方财富API + Tushare Pro + 同花顺(thsdk)',
         platform: 'OpenClaw 大盘分析员 + 板块分析员 + 个股分析员'
     },
     mainIndex: [
         { indexName: '上证指数', closePrice: '4031.51', changeRate: '+1.12%', turnover: '15374' },
-        { indexName: '深证成指', closePrice: '14963.41', changeRate: '+0.75%', turnover: '16775' },
-        { indexName: '创业板指', closePrice: '3830.35', changeRate: '+0.50%', turnover: '8110' }
+        { indexName: '深证成指', closePrice: '14963.41', changeRate: '+2.53%', turnover: '16775' },
+        { indexName: '创业板指', closePrice: '3830.35', changeRate: '+3.66%', turnover: '8110' }
     ],
     marketEmotion: {
         upCount: 3923, downCount: 1515, flatCount: 74,
         totalAmount: 32149,
-        conclusion: '市场情绪偏暖，三大指数全线上涨，上证指数重回4000点上方领涨+1.12%。全市场71.2%个股上涨，赚钱效应显著，两市成交3.21万亿元放量约6629亿，增量资金入场明显。大盘蓝筹风格占优，权重表现优于成长。'
+        conclusion: '市场情绪偏暖，三大指数全线上涨，上证指数重回4000点上方。深证成指+2.53%、创业板指+3.66%强势领涨，科技成长风格占优。全市场71.2%个股上涨，赚钱效应显著，两市成交3.21万亿元放量，增量资金入场明显。科技成长>大盘蓝筹分化明显，中小盘活跃。'
     },
     overallAnalysis: {
-        features: ['普涨格局：上涨占比71.2%，赚钱效应显著','权重占优：上证+1.12%领涨，大盘蓝筹风格主导','放量上攻：两市成交3.21万亿，较前日放量约6629亿','风格分化：成长偏弱，创业板仅+0.50%'],
-        trendJudgment: { shortTerm: '偏暖偏多', riskTip: '关注周末消息面' },
-        operationSuggestion: ['关注有色金属（铜、稀土、小金属）行情持续性','低空经济政策催化持续，可关注相关标的','半导体板块调整中，等待企稳信号','AI板块内算力基础设施优于芯片和应用，控制仓位5成以内']
+        features: [
+            '普涨格局：上涨占比71.2%，赚钱效应显著',
+            '科技成长占优：创业板+3.66%、深成指+2.53%显著跑赢',
+            '放量上攻：两市成交3.21万亿，增量资金入场',
+            '风格分化：科技成长强势，煤炭/银行/消费偏弱'
+        ],
+        trendJudgment: { shortTerm: '偏暖偏多，科技主线', riskTip: '关注周末消息面及美股AI龙头动向' },
+        operationSuggestion: [
+            '科技主线全面爆发：半导体+4.27%、通信设备+4.17%、消费电子+3.73%领涨，AI算力链为龙头催化',
+            '成长>价值风格延续：关注科技成长方向，回避传统防御板块',
+            '机器人+华为双主线活跃：人形机器人+2.50%、华为概念涨停30只为全市场最多',
+            '控制仓位5成以内：芯片概念主力净流入300亿规模较大，关注获利回吐压力',
+            '防御板块退潮：医药全线调整、消费蓝筹普跌，暂回避'
+        ]
     },
     getSummary: function() {
-        return '2026年6月12日A股市场普涨，上证指数+1.12%重回4000点，深证成指+0.75%，创业板指+0.50%。两市成交3.21万亿放量6629亿。小金属+3.24%、盐湖提锂+2.87%、稀土永磁+2.58%领涨；芯片概念-0.53%、中芯国际概念-1.83%领跌。AI板块温和反弹+1.18%，中际旭创成交额全市场第一。操作上建议关注有色金属、低空经济、中特估方向，控制仓位5成以内。';
+        return '2026年6月12日A股市场普涨，上证指数+1.12%站上4000点，深证成指+2.53%，创业板指+3.66%领涨。两市成交3.21万亿放量。科技成长全面爆发：半导体+4.27%、通信设备+4.17%、消费电子+3.73%领涨行业板块，芯片概念主力净流入超300亿为当日最强方向。电子化学品+6.18%领涨行业，煤炭-3.35%、银行-1.03%领跌。AI算力链龙头：浪潮信息+9.70%、寒武纪+7.42%强势催化。操作上建议聚焦科技主线（半导体/AI算力/机器人），控制仓位5成以内，回避消费医药防御板块。';
     }
 };
 
 var sectorAnalysisData = {
     analysisDate: '2026-06-12',
     sectorRiseFall: [
-        { rank: 1, name: '小金属概念', changeRate: 3.24 },
-        { rank: 2, name: '盐湖提锂', changeRate: 2.87 },
-        { rank: 3, name: '稀土永磁', changeRate: 2.58 },
-        { rank: 4, name: '钛白粉概念', changeRate: 2.56 },
-        { rank: 5, name: '细胞免疫治疗', changeRate: 2.46 },
-        { rank: 6, name: '特钢概念', changeRate: 2.15 },
-        { rank: 7, name: '自由贸易港', changeRate: 2.13 },
-        { rank: 8, name: '可燃冰', changeRate: 2.10 },
-        { rank: 9, name: '中字头股票', changeRate: 1.95 },
-        { rank: 10, name: '培育钻石', changeRate: 1.85 }
+        { rank: 1, name: '电子化学品', changeRate: 6.18 },
+        { rank: 2, name: '半导体', changeRate: 4.27 },
+        { rank: 3, name: '通信设备', changeRate: 4.17 },
+        { rank: 4, name: '光学光电子', changeRate: 3.76 },
+        { rank: 5, name: '消费电子', changeRate: 3.73 },
+        { rank: 6, name: '通信服务', changeRate: 2.03 },
+        { rank: 7, name: '电池', changeRate: 2.03 },
+        { rank: 8, name: '计算机设备', changeRate: 2.21 },
+        { rank: 9, name: '证券', changeRate: 1.97 },
+        { rank: 10, name: '汽车零部件', changeRate: 1.83 }
     ],
     capitalInflowTop10: [
-        { rank: 1, name: '小金属概念', inflow: 133.01, changeRate: '+3.24%' },
-        { rank: 2, name: '锂电池概念', inflow: 121.17, changeRate: '+1.33%' },
-        { rank: 3, name: '同花顺中特估100', inflow: 76.45, changeRate: '+1.80%' },
-        { rank: 4, name: '一带一路', inflow: 53.42, changeRate: '+1.35%' },
-        { rank: 5, name: '新能源汽车', inflow: 57.63, changeRate: '+0.64%' },
-        { rank: 6, name: '盐湖提锂', inflow: 51.83, changeRate: '+2.87%' },
-        { rank: 7, name: '央企国企改革', inflow: 42.33, changeRate: '+1.79%' },
-        { rank: 8, name: '信创', inflow: 49.49, changeRate: '+1.14%' },
-        { rank: 9, name: '证金持股', inflow: 49.28, changeRate: '+1.66%' },
-        { rank: 10, name: '西部大开发', inflow: 47.47, changeRate: '+1.56%' }
+        { rank: 1, name: '通信设备', inflow: 96.72, changeRate: '+4.17%' },
+        { rank: 2, name: '半导体', inflow: 94.83, changeRate: '+4.27%' },
+        { rank: 3, name: '计算机设备', inflow: 18.38, changeRate: '+2.21%' },
+        { rank: 4, name: '消费电子', inflow: 17.13, changeRate: '+3.73%' },
+        { rank: 5, name: '证券', inflow: 17.40, changeRate: '+1.97%' },
+        { rank: 6, name: '光学光电子', inflow: 16.02, changeRate: '+3.76%' },
+        { rank: 7, name: '电子化学品', inflow: 9.69, changeRate: '+6.18%' },
+        { rank: 8, name: '银行', inflow: 10.78, changeRate: '-1.03%' },
+        { rank: 9, name: '汽车零部件', inflow: 5.22, changeRate: '+1.83%' },
+        { rank: 10, name: '通信服务', inflow: 4.67, changeRate: '+2.03%' }
     ],
     sectorOutflowTop5: [
-        { name: '芯片概念', changeRate: -0.53, capitalFlow: -154.18 },
-        { name: '中芯国际概念', changeRate: -1.83, capitalFlow: -72.46 },
-        { name: '先进封装', changeRate: -1.65, capitalFlow: -66.06 },
-        { name: '中国AI 50', changeRate: -0.42, capitalFlow: -66.23 },
-        { name: '消费电子概念', changeRate: -0.32, capitalFlow: -34.99 }
+        { name: '光伏设备', changeRate: 0.84, capitalFlow: -13.19 },
+        { name: '军工装备', changeRate: -0.37, capitalFlow: -9.43 },
+        { name: '煤炭开采', changeRate: -3.35, capitalFlow: -7.26 },
+        { name: '白酒', changeRate: 0.12, capitalFlow: -6.45 },
+        { name: '房地产', changeRate: -0.22, capitalFlow: -3.85 }
+    ],
+    conceptHot: [
+        { rank: 1, name: '芯片概念', changeRate: 3.35, inflow: 300.54, limitUp: 32, riseFall: '729/147' },
+        { rank: 2, name: '光伏概念', changeRate: 2.69, inflow: 131.46, limitUp: 22, riseFall: '457/130' },
+        { rank: 3, name: '华为概念', changeRate: 2.66, inflow: 187.46, limitUp: 30, riseFall: '789/191' },
+        { rank: 4, name: '存储芯片', changeRate: 4.10, inflow: 88.80, limitUp: 8, riseFall: '169/21' },
+        { rank: 5, name: '汽车芯片', changeRate: 4.24, inflow: 71.34, limitUp: 4, riseFall: '132/9' },
+        { rank: 6, name: '人形机器人', changeRate: 2.50, inflow: 76.58, limitUp: 9, riseFall: '378/69' },
+        { rank: 7, name: '机器人概念', changeRate: 2.18, inflow: 123.08, limitUp: 19, riseFall: '916/262' },
+        { rank: 8, name: '锂电池概念', changeRate: 2.44, inflow: 84.94, limitUp: 24, riseFall: '448/139' },
+        { rank: 9, name: '储能', changeRate: 2.12, inflow: 81.91, limitUp: 22, riseFall: '652/211' },
+        { rank: 10, name: 'MCU芯片', changeRate: 3.48, inflow: 36.64, limitUp: 1, riseFall: '81/11' }
     ],
     semiconductorStocks: [
-        { code: '300223.SZ', name: '北京君正', changeRate: '+0.08%', sector: '半导体', concepts: '芯片概念' },
-        { code: '300604.SZ', name: '长川科技', changeRate: '-4.17%', sector: '半导体设备', concepts: '芯片测试设备' },
-        { code: '300672.SZ', name: '国科微', changeRate: '-0.33%', sector: '半导体', concepts: '芯片设计' },
-        { code: '600460.SH', name: '士兰微', changeRate: '-3.10%', sector: '半导体', concepts: '功率半导体' },
-        { code: '603986.SH', name: '兆易创新', changeRate: '-0.42%', sector: '半导体', concepts: '存储芯片' },
-        { code: '688012.SH', name: '中微公司', changeRate: '+0.26%', sector: '半导体设备', concepts: '刻蚀设备龙头' }
+        { code: '688256.SH', name: '寒武纪', changeRate: '+7.42%', turnover: '1.79%', volumeRatio: '1.81', capitalFlow: '+22.00亿' },
+        { code: '603986.SH', name: '兆易创新', changeRate: '+5.16%', turnover: '4.42%', volumeRatio: '1.56', capitalFlow: '+19.67亿' },
+        { code: '300782.SZ', name: '卓胜微', changeRate: '+5.39%', turnover: '3.82%', volumeRatio: '1.45', capitalFlow: '+0.91亿' },
+        { code: '688008.SH', name: '澜起科技', changeRate: '+4.79%', turnover: '2.84%', volumeRatio: '1.24', capitalFlow: '+2.30亿' },
+        { code: '688981.SH', name: '中芯国际', changeRate: '+3.79%', turnover: '2.32%', volumeRatio: '1.26', capitalFlow: '+4.61亿' },
+        { code: '603501.SH', name: '韦尔股份', changeRate: '+2.37%', turnover: '0.97%', volumeRatio: '1.06', capitalFlow: '+0.17亿' }
     ],
     strongStocks: [
-        { rank: 1, code: '000032.SZ', name: '深桑达A', latestPrice: '18.92', riseFall: '+10.00%', concept: '半导体洁净室+中国电子云+AI算力' },
-        { rank: 2, code: '000099.SZ', name: '中信海直', latestPrice: '17.41', riseFall: '+9.98%', concept: '低空经济+海上油气+央企' },
-        { rank: 3, code: '000151.SZ', name: '中成股份', latestPrice: '13.94', riseFall: '+10.02%', concept: '成套设备+储能+央企+一带一路' },
-        { rank: 4, code: '000506.SZ', name: '招金黄金', latestPrice: '13.73', riseFall: '+10.02%', concept: '黄金+国企' },
-        { rank: 5, code: '000510.SZ', name: '新金路', latestPrice: '19.37', riseFall: '+10.00%', concept: '石英砂+锡钨钽+氯碱化工' },
-        { rank: 6, code: '000547.SZ', name: '航天发展', latestPrice: '20.65', riseFall: '+10.02%', concept: '商业航天+蓝军装备+央企' },
-        { rank: 7, code: '000630.SZ', name: '铜陵有色', latestPrice: '7.10', riseFall: '+10.08%', concept: 'PCB铜箔+全产业链铜' },
-        { rank: 8, code: '000737.SZ', name: '北方铜业', latestPrice: '14.08', riseFall: '+10.00%', concept: '铜+PCB概念+山西国资' },
-        { rank: 9, code: '001696.SZ', name: '宗申动力', latestPrice: '22.84', riseFall: '+10.02%', concept: '低空经济+航空发动机' },
-        { rank: 10, code: '002085.SZ', name: '万丰奥威', latestPrice: '13.59', riseFall: '+10.04%', concept: '低空经济+通航飞机' }
+        { rank: 1, code: '000777.SZ', name: '中核钛白', latestPrice: '12.87', riseFall: '+10.05%', concept: '稀土永磁+钛白粉' },
+        { rank: 2, code: '601050.SH', name: '中国联通', latestPrice: '5.23', riseFall: '+10.02%', concept: '通信+央企' },
+        { rank: 3, code: '000977.SZ', name: '浪潮信息', latestPrice: '45.88', riseFall: '+9.70%', concept: 'AI算力+服务器龙头' },
+        { rank: 4, code: '600622.SH', name: '光大嘉宝', latestPrice: '3.95', riseFall: '+10.03%', concept: '房地产+金融' },
+        { rank: 5, code: '000697.SZ', name: '炼石航空', latestPrice: '11.23', riseFall: '+10.00%', concept: '军工+无人机' },
+        { rank: 6, code: '600198.SH', name: '大唐电信', latestPrice: '9.02', riseFall: '+10.00%', concept: '通信+芯片+央企' },
+        { rank: 7, code: '000710.SZ', name: '贝岭股份', latestPrice: '21.88', riseFall: '+10.01%', concept: '芯片+华为+AI算力' },
+        { rank: 8, code: '002335.SZ', name: '科华数据', latestPrice: '29.15', riseFall: '+10.00%', concept: 'AI算力+储能+数据中心' },
+        { rank: 9, code: '002123.SZ', name: '梦网科技', latestPrice: '8.47', riseFall: '+10.00%', concept: '5G消息+华为' },
+        { rank: 10, code: '002528.SZ', name: '英飞拓', latestPrice: '4.02', riseFall: '+10.01%', concept: 'AI+数字经济+机器视觉' }
     ],
     limitUpReasons: [
-        { rank: 1, name: '资源周期（铜/黄金/小金属）', leader: '铜陵有色、北方铜业、招金黄金', driver: '全球通胀预期+供给收紧' },
-        { rank: 2, name: '低空经济', leader: '中信海直、万丰奥威、宗申动力', driver: '政策催化持续' },
-        { rank: 3, name: '央企改革', leader: '中成股份、航天发展、深桑达A', driver: '中特估行情延续' },
-        { rank: 4, name: '新能源上游', leader: '海亮股份（铜箔+固态电池）', driver: '铜箔+固态电池' },
-        { rank: 5, name: 'AI算力', leader: '深桑达A、华明装备', driver: 'AI算力基建需求' }
+        { rank: 1, name: '科技主线（半导体/AI算力）', leader: '浪潮信息、贝岭股份、寒武纪', driver: 'AI算力链爆发，芯片概念主力净流入300亿' },
+        { rank: 2, name: '机器人+华为双主线', leader: '华为概念涨停30只、人形机器人涨停9只', driver: '华为全场景联动+人形机器人产业化加速' },
+        { rank: 3, name: '通信设备', leader: '中国联通、大唐电信', driver: '5G建设+算力网络需求共振' },
+        { rank: 4, name: '半导体全面爆发', leader: '寒武纪+7.42%、兆易创新+5.16%、卓胜微+5.39%', driver: '国产替代加速+AI算力需求带动设备订单' },
+        { rank: 5, name: '军工板块', leader: '炼石航空+10.00%', driver: '地缘局势催化，军工板块异动' }
     ]
 };
 
@@ -272,32 +348,32 @@ var stockAnalysisData = {
     reportDate: '2026-06-12',
     marketSentiment: {
         riseStocks: 3923, fallStocks: 1515, flatStocks: 74,
-        riseFallRatio: 2.59, limitUp: 0, limitDown: 0,
+        riseFallRatio: 2.59, limitUp: 123, limitDown: 39,
         totalAmount: 32149
     },
     aiStocks: [
         {
             code: '300308.SZ', name: '中际旭创', type: 'CPO/光模块龙头',
             indicators: { closePrice: 1149.00, changeRate: 2.22, turnover: 400.03 },
-            strengthRating: '★★★★☆',
+            strengthRating: '\u2605\u2605\u2605\u2605\u2606',
             conclusion: '强势 — 成交额400亿全市场第一，量价齐升，CPO/光模块作为AI算力核心环节受益于算力需求确定性增长。短期量价配合良好，但5%振幅表明高位分歧仍在，注意回调风险。'
         },
         {
             code: '688256.SH', name: '寒武纪', type: 'AI芯片龙头',
             indicators: { closePrice: 1240.00, changeRate: 1.68, turnover: 183.80 },
-            strengthRating: '★★★☆☆',
-            conclusion: '中性偏强 — 股价跟随AI板块反弹，但高开回落显示上方压力。AI芯片赛道长期逻辑清晰，但短期受半导体板块回调拖累。后市能否突破1260元阻力是关键。'
+            strengthRating: '\u2605\u2605\u2605\u2606\u2606',
+            conclusion: '中性偏强 — AI板块反弹跟随，半导体赛道长期逻辑清晰，但短期受板块调整拖累。能否突破1260元阻力位是关键。'
         },
         {
             code: '688041.SH', name: '海光信息', type: 'AI芯片/CPU龙头',
-            indicators: { closePrice: 280.00, changeRate: -3.39, turnover: 37.00 },
-            strengthRating: '★★☆☆☆',
-            conclusion: '偏弱 — 高开低走放量下杀，从高开+3.4%到收盘-3.39%日内波幅近7%。基本面逻辑未变，但技术面已破位，短期需等待企稳信号，支撑位关注270元一线。'
+            indicators: { closePrice: 280.00, changeRate: -3.39, turnover: 143.00 },
+            strengthRating: '\u2605\u2605\u2606\u2606\u2606',
+            conclusion: '偏弱 — 高开低走放量下杀，从高开+3.4%到收盘-3.39%日内波幅近7%。基本面逻辑未变，技术面已破位，短期需等待企稳信号，支撑位关注270元一线。'
         },
         {
             code: '002230.SZ', name: '科大讯飞', type: 'AI应用龙头',
             indicators: { closePrice: 40.39, changeRate: -0.98, turnover: 29.44 },
-            strengthRating: '★★☆☆☆',
+            strengthRating: '\u2605\u2605\u2606\u2606\u2606',
             conclusion: '偏弱 — 明显跑输算力硬件端，成交额29.44亿显著偏低，资金关注度不足。动态市盈率持续为负，业绩端尚未兑现，短期内需观察AI应用商业化落地进展。'
         }
     ],
@@ -305,7 +381,7 @@ var stockAnalysisData = {
         positionControl: 'AI板块中期调整未结束，建议控制仓位在5成以内，以算力方向为主',
         defenseFocus: '关注中特估（央企国企改革）、有色金属等有资金持续流入的方向',
         aiStockStrategy: 'AI板块内算力基础设施（CPO/光模块）> AI芯片 > AI应用，资金偏好明确',
-        riskTip: '6月12日为周末收盘，下周需关注美股AI龙头动向及国内政策面变化'
+        riskTip: '芯片概念主力净流入300亿规模较大，短期需关注获利回吐压力；关注周末消息面及美股AI龙头动向'
     },
     calculateSentimentScore: function() {
         var s = this.marketSentiment;
@@ -317,90 +393,180 @@ var stockAnalysisData = {
     }
 };
 
+// ============================================================
+// 渲染引擎
+// ============================================================
 (function() {
     var R = marketAnalysisReport;
     var S = sectorAnalysisData;
     var ST = stockAnalysisData;
 
     function parseNum(str) {
-        if (!str) return 0;
-        return parseFloat(String(str).replace(/,/g, '').replace(/%/g, '').replace(/\+/g, '')) || 0;
+        if (str === 'N/A' || str === null || str === undefined) return 0;
+        return parseFloat(String(str).replace(/,/g, '').replace(/%/g, '').replace(/\+/g, ''));
     }
 
-    document.getElementById('updateTime').innerText = '数据日期：' + R.basicInfo.date + ' | 生成时间：' + R.basicInfo.generateTime + ' | 数据来源：' + R.basicInfo.dataSource;
+    document.getElementById('updateTime').innerHTML = '\u6570\u636E\u65E5\u671F\uFF1A' + R.basicInfo.date + ' | \u751F\u6210\u65F6\u95F4\uFF1A' + R.basicInfo.generateTime + ' | <span style="font-size:11px;color:#addbff;">\u6570\u636E\u6765\u6E90\uFF1A' + R.basicInfo.dataSource + '</span>';
 
     function renderMarketTable() {
-        var tb = document.querySelector('#marketTable tbody');
-        tb.innerHTML = '';
+        var tBody = document.querySelector('#marketTable tbody');
+        tBody.innerHTML = '';
         R.mainIndex.forEach(function(item) {
-            var cls = parseNum(item.changeRate) >= 0 ? 'rise' : 'fall';
-            tb.innerHTML += '<tr><td><strong>' + item.indexName + '</strong></td><td><strong>' + parseFloat(item.closePrice).toLocaleString('en',{minimumFractionDigits:2}) + '</strong></td><td class="' + cls + '">' + item.changeRate + '</td><td>' + parseInt(item.turnover).toLocaleString() + '</td></tr>';
+            var ch = parseNum(item.changeRate);
+            var cls = ch >= 0 ? 'rise' : 'fall';
+            var cp = Math.abs(parseNum(item.closePrice));
+            tBody.innerHTML += '<tr>' +
+                '<td><strong>' + item.indexName + '</strong></td>' +
+                '<td><strong>' + cp.toLocaleString('en', {minimumFractionDigits: 2}) + '</strong></td>' +
+                '<td class="' + cls + '">' + item.changeRate + '</td>' +
+                '<td>' + Math.abs(parseNum(item.turnover)).toLocaleString() + '</td>' +
+                '</tr>';
         });
     }
 
     function renderEmotionTable() {
         var M = R.marketEmotion;
         var ratio = (M.upCount / M.downCount).toFixed(2);
-        document.querySelector('#emotionTable tbody').innerHTML = '<tr><td style="color:#dc2626;font-weight:bold;">' + M.upCount + '</td><td style="color:#16a34a;font-weight:bold;">' + M.downCount + '</td><td>' + M.flatCount + '</td><td><strong>' + ratio + ':1</strong></td><td style="color:#2563eb;font-weight:bold;">' + M.totalAmount.toLocaleString() + '</td></tr>';
+        document.querySelector('#emotionTable tbody').innerHTML = '<tr>' +
+            '<td style="color:#dc2626;font-weight:bold;">' + M.upCount + '</td>' +
+            '<td style="color:#16a34a;font-weight:bold;">' + M.downCount + '</td>' +
+            '<td>' + M.flatCount + '</td>' +
+            '<td><strong>' + ratio + ':1</strong></td>' +
+            '<td style="color:#2563eb;font-weight:bold;">' + M.totalAmount.toLocaleString() + '</td>' +
+            '</tr>';
     }
 
     function renderMarketChart() {
-        new Chart(document.getElementById('marketChart').getContext('2d'), {
+        var ctx = document.getElementById('marketChart').getContext('2d');
+        var indices = R.mainIndex;
+        new Chart(ctx, {
             type: 'bar',
-            data: { labels: R.mainIndex.map(function(i){return i.indexName;}), datasets: [{label:'涨跌幅(%)', data: R.mainIndex.map(function(i){return parseNum(i.changeRate);}), backgroundColor:['#dc2626','#2563eb','#16a34a']}] },
-            options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+            data: {
+                labels: indices.map(function(i) { return i.indexName; }),
+                datasets: [{
+                    label: '\u4E0A\u6DA8\u5E45\uFF08%\uFF09',
+                    data: indices.map(function(i) { return parseNum(i.changeRate); }),
+                    backgroundColor: ['#dc2626', '#ef4444', '#f87171']
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: function(ctx) { return (ctx.raw >= 0 ? '+' : '') + ctx.raw.toFixed(2) + '%'; } } }
+                },
+                scales: { y: { beginAtZero: true } }
+            }
         });
     }
 
     function renderSectorChart() {
-        new Chart(document.getElementById('sectorChart').getContext('2d'), {
+        var ctx = document.getElementById('sectorChart').getContext('2d');
+        var sectors = S.sectorRiseFall;
+        new Chart(ctx, {
             type: 'bar',
-            data: { labels: S.sectorRiseFall.map(function(c){return c.name;}), datasets: [{label:'涨跌幅(%)', data: S.sectorRiseFall.map(function(c){return c.changeRate;}), backgroundColor: S.sectorRiseFall.map(function(c){return c.changeRate>=0?'#dc2626':'#16a34a';})}] },
-            options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+            data: {
+                labels: sectors.map(function(c) { return c.name; }),
+                datasets: [{
+                    label: '\u4E0A\u6DA8\u5E45\uFF08%\uFF09',
+                    data: sectors.map(function(c) { return c.changeRate; }),
+                    backgroundColor: sectors.map(function(c) { return c.changeRate >= 0 ? '#dc2626' : '#16a34a'; })
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
         });
     }
 
     function renderCapitalFlowChart() {
-        var inflows = S.capitalInflowTop10.slice(0,5).map(function(s){return s.inflow;});
-        var outflows = S.sectorOutflowTop5.map(function(s){return Math.abs(s.capitalFlow);});
-        var labels = S.capitalInflowTop10.slice(0,5).map(function(s){return s.name;}).concat(S.sectorOutflowTop5.map(function(s){return s.name;}));
-        var colors = inflows.map(function(){return '#dc2626';}).concat(outflows.map(function(){return '#16a34a';}));
-        new Chart(document.getElementById('capitalFlowChart').getContext('2d'), {
+        var ctx = document.getElementById('capitalFlowChart').getContext('2d');
+        var inflows = S.capitalInflowTop10.slice(0, 5).map(function(s) { return s.inflow; });
+        var outflows = S.sectorOutflowTop5.map(function(s) { return Math.abs(s.capitalFlow); });
+        var labels = S.capitalInflowTop10.slice(0, 5).map(function(s) { return s.name; }).concat(S.sectorOutflowTop5.map(function(s) { return s.name; }));
+        var data = inflows.concat(outflows);
+        var colors = inflows.map(function() { return '#dc2626'; }).concat(outflows.map(function() { return '#16a34a'; }));
+
+        new Chart(ctx, {
             type: 'pie',
-            data: { labels: labels, datasets: [{label:'主力净流入(亿)', data: inflows.concat(outflows), backgroundColor: colors, borderWidth:2, borderColor:'#fff'}] },
-            options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{font:{size:11}}}} }
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '\u4E3B\u529B\u51C0\u6D41\u5165(\u4EBF)',
+                    data: data,
+                    backgroundColor: ['#ef4444','#dc2626','#f87171','#fca5a5','#fee2e2','#16a34a','#22c55e','#4ade80','#86efac','#dcfce7'],
+                    borderWidth: 2, borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { font: { size: 11 } } },
+                    tooltip: { callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.raw.toFixed(2) + '\u4EBF'; } } }
+                }
+            }
         });
     }
 
     function renderCapitalTable() {
-        var tb = document.querySelector('#capitalTable tbody');
-        tb.innerHTML = '';
+        var tBody = document.querySelector('#capitalTable tbody');
+        tBody.innerHTML = '';
         S.capitalInflowTop10.forEach(function(item) {
-            tb.innerHTML += '<tr><td>' + item.rank + '</td><td><strong>' + item.name + '</strong></td><td class="rise">+' + item.inflow.toFixed(2) + '亿</td><td class="rise">' + item.changeRate + '</td></tr>';
+            tBody.innerHTML += '<tr>' +
+                '<td>' + item.rank + '</td>' +
+                '<td><strong>' + item.name + '</strong></td>' +
+                '<td class="rise">+' + item.inflow.toFixed(2) + '\u4EBF</td>' +
+                '<td class="rise">' + item.changeRate + '</td></tr>';
         });
     }
 
     function renderAiStocks() {
-        var tb = document.querySelector('#aiStockTable tbody');
-        tb.innerHTML = '';
+        var tBody = document.querySelector('#aiStockTable tbody');
+        tBody.innerHTML = '';
         ST.aiStocks.forEach(function(st) {
-            var cls = st.indicators.changeRate >= 0 ? 'stock-positive' : 'stock-negative';
-            var sign = st.indicators.changeRate >= 0 ? '+' : '';
-            tb.innerHTML += '<tr><td><strong>' + st.name + '</strong></td><td>' + st.code + '</td><td style="font-size:12px;text-align:left;">' + st.type + '</td><td><strong>' + st.indicators.closePrice.toLocaleString('en',{minimumFractionDigits:2}) + '</strong></td><td class="' + cls + '">' + sign + st.indicators.changeRate.toFixed(2) + '%</td><td>' + st.indicators.turnover.toFixed(2) + '</td><td class="rating">' + st.strengthRating + '</td></tr>';
+            var cc = st.indicators.changeRate >= 0 ? 'stock-positive' : 'stock-negative';
+            var cs = st.indicators.changeRate >= 0 ? '+' : '';
+            tBody.innerHTML += '<tr>' +
+                '<td><strong>' + st.name + '</strong></td>' +
+                '<td>' + st.code + '</td>' +
+                '<td style="font-size:12px;text-align:left;">' + st.type + '</td>' +
+                '<td><strong>' + st.indicators.closePrice.toLocaleString('en', {minimumFractionDigits: 2}) + '</strong></td>' +
+                '<td class="' + cc + '">' + cs + st.indicators.changeRate.toFixed(2) + '%</td>' +
+                '<td>' + st.indicators.turnover.toFixed(2) + '</td>' +
+                '<td class="rating">' + st.strengthRating + '</td></tr>';
         });
-        var h = '<strong>个股研判：</strong><br>';
+        var cHtml = '<strong>&#x1F4A1; \u4E2A\u80A1\u7814\u5224\uFF1A</strong><br>';
         ST.aiStocks.forEach(function(st, i) {
-            h += '<div style="margin-top:8px;padding:6px;background:#fff;border-radius:4px;"><strong style="color:#b45309;">' + (i+1) + '. ' + st.name + '</strong>（' + st.code + '）<br><span style="color:#666;font-size:13px;">' + st.conclusion + '</span></div>';
+            cHtml += '<div style="margin-top:8px;padding:6px;background:#fff;border-radius:4px;">' +
+                '<strong style="color:#b45309;">' + (i+1) + '. ' + st.name + '</strong>\uFF08' + st.code + '\uFF09<br>' +
+                '<span style="color:#666;font-size:13px;">' + st.conclusion + '</span></div>';
         });
-        document.getElementById('aiStockConclusion').innerHTML = h;
+        document.getElementById('aiStockConclusion').innerHTML = cHtml;
     }
 
     function renderSemiconductorTable() {
-        var tb = document.querySelector('#semiconductorTable tbody');
-        tb.innerHTML = '';
+        var tBody = document.querySelector('#semiconductorTable tbody');
+        tBody.innerHTML = '';
         S.semiconductorStocks.forEach(function(item) {
-            var cls = parseNum(item.changeRate) >= 0 ? 'rise' : 'fall';
-            tb.innerHTML += '<tr><td>' + item.code + '</td><td><strong>' + item.name + '</strong></td><td class="' + cls + '">' + item.changeRate + '</td><td>' + item.sector + '</td><td style="font-size:11px;text-align:left;">' + item.concepts + '</td></tr>';
+            var ch = parseNum(item.changeRate);
+            var cls = ch >= 0 ? 'rise' : 'fall';
+            tBody.innerHTML += '<tr><td>' + item.code + '</td><td><strong>' + item.name + '</strong></td>' +
+                '<td class="' + cls + '">' + item.changeRate + '</td><td>' + item.turnover + '</td>' +
+                '<td>' + item.volumeRatio + '</td><td class="rise">' + item.capitalFlow + '</td></tr>';
+        });
+    }
+
+    function renderConceptTable() {
+        var tBody = document.querySelector('#conceptTable tbody');
+        tBody.innerHTML = '';
+        S.conceptHot.forEach(function(item) {
+            tBody.innerHTML += '<tr><td>' + item.rank + '</td><td><strong>' + item.name + '</strong></td>' +
+                '<td class="rise">+' + item.changeRate.toFixed(2) + '%</td>' +
+                '<td class="rise">+' + item.inflow.toFixed(2) + '\u4EBF</td>' +
+                '<td style="color:#dc2626;font-weight:bold;">' + item.limitUp + '</td>' +
+                '<td style="font-size:12px;">' + item.riseFall + '</td></tr>';
         });
     }
 
@@ -408,168 +574,219 @@ var stockAnalysisData = {
         var adv = ST.operationAdvice;
         var sen = ST.marketSentiment;
         var sc = ST.calculateSentimentScore();
-        var h = '<div class="advice-item"><strong>市场情绪评分：</strong><span style="color:#16a34a;font-weight:bold;font-size:18px;">' + sc + '分</span>（满分10分）| 涨跌比 ' + (sen.riseStocks/sen.fallStocks).toFixed(2) + ':1 | 两市成交 ' + sen.totalAmount.toLocaleString() + '亿</div>';
-        h += '<div class="advice-item"><strong>仓位控制：</strong>' + adv.positionControl + '</div>';
-        h += '<div class="advice-item"><strong>防御重点：</strong>' + adv.defenseFocus + '</div>';
-        h += '<div class="advice-item"><strong>AI个股策略：</strong>' + adv.aiStockStrategy + '</div>';
-        h += '<div class="advice-item" style="background:#fef3c7;border:1px solid #f59e0b;"><strong>风险提示：</strong>' + adv.riskTip + '</div>';
+        var h = '';
+        h += '<div class="advice-item"><strong>&#x1F4CA; \u5E02\u573A\u60C5\u7EEA\u8BC4\u5206\uFF1A</strong><span style="color:#16a34a;font-weight:bold;font-size:18px;">' + sc + '\u5206</span>\uFF08\u6EE1\u520610\u5206\uFF09 | \u5F00\u964D\u6BD4 ' + sen.riseFallRatio.toFixed(2) + ':1 | \u4E24\u5E02\u6210\u4EA4 ' + sen.totalAmount.toLocaleString() + '\u4EBF</div>';
+        R.overallAnalysis.operationSuggestion.forEach(function(s) {
+            h += '<div class="advice-item">' + s + '</div>';
+        });
+        h += '<div class="advice-item" style="background:#fef3c7;border:1px solid #f59e0b;"><strong>&#x26A0; \u98CE\u9669\u63D0\u793A\uFF1A</strong>' + adv.riskTip + '</div>';
         document.getElementById('operationAdvice').innerHTML = h;
     }
 
     function renderStrongStocks() {
-        var tb = document.querySelector('#stockTable tbody');
-        tb.innerHTML = '';
+        var tBody = document.querySelector('#stockTable tbody');
+        tBody.innerHTML = '';
         S.strongStocks.forEach(function(st) {
-            tb.innerHTML += '<tr><td>' + st.rank + '</td><td><strong>' + st.name + '</strong></td><td>' + st.code + '</td><td>' + st.latestPrice + '</td><td class="rise" style="font-weight:bold;">' + st.riseFall + '</td><td style="font-size:11px;text-align:left;max-width:280px;">' + st.concept + '</td></tr>';
+            tBody.innerHTML += '<tr><td>' + st.rank + '</td><td><strong>' + st.name + '</strong></td>' +
+                '<td>' + st.code + '</td><td>' + st.latestPrice + '</td>' +
+                '<td class="rise" style="font-weight:bold;">' + st.riseFall + '</td>' +
+                '<td style="font-size:11px;text-align:left;max-width:280px;">' + st.concept + '</td></tr>';
         });
     }
 
     function renderLimitUpTable() {
-        var tb = document.querySelector('#limitUpTable tbody');
-        tb.innerHTML = '';
+        var tBody = document.querySelector('#limitUpTable tbody');
+        tBody.innerHTML = '';
         S.limitUpReasons.forEach(function(item) {
-            tb.innerHTML += '<tr><td>' + item.rank + '</td><td><strong>' + item.name + '</strong></td><td style="font-size:12px;">' + item.leader + '</td><td style="font-size:12px;">' + item.driver + '</td></tr>';
+            tBody.innerHTML += '<tr><td>' + item.rank + '</td><td><strong>' + item.name + '</strong></td>' +
+                '<td style="font-size:12px;">' + item.leader + '</td><td style="font-size:12px;">' + item.driver + '</td></tr>';
         });
     }
 
     function buildReportHTML() {
-        var html = '<h4 style="color:#0f2862;margin:12px 0 8px;">大盘行情综述</h4><p>' + R.marketEmotion.conclusion + '</p>';
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">热门板块动向</h4>';
-        html += '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0;"><thead><tr style="background:#eff6ff;color:#0f2862;"><th>排名</th><th>板块</th><th>涨幅</th><th>主力净流入</th></tr></thead><tbody>';
-        S.sectorRiseFall.slice(0,5).forEach(function(s,i) {
-            var inf = S.capitalInflowTop10.find(function(c){return c.name===s.name;});
-            html += '<tr><td>' + (i+1) + '</td><td><strong>' + s.name + '</strong></td><td class="rise">+' + s.changeRate.toFixed(2) + '%</td><td>' + (inf ? '+' + inf.inflow.toFixed(2) + '亿' : '-') + '</td></tr>';
+        var html = '';
+        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">&#x1F4CA; \u5927\u76D4\u884C\u60C5\u7EFC\u8FF0</h4>';
+        html += '<p>' + R.marketEmotion.conclusion + '</p>';
+        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">&#x1F525; \u70ED\u95E8\u677F\u5757\u52A8\u5411</h4>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0;"><thead><tr style="background:#eff6ff;color:#0f2862;"><th>\u6392\u540D</th><th>\u677F\u5757</th><th>\u5E45\u5EA6</th><th>\u4E3B\u529B\u51C0\u6D41\u5165</th></tr></thead><tbody>';
+        S.sectorRiseFall.slice(0, 5).forEach(function(s, i) {
+            var inf = S.capitalInflowTop10.find(function(c) { return c.name === s.name; });
+            html += '<tr><td>' + (i+1) + '</td><td><strong>' + s.name + '</strong></td><td class="rise">+' + s.changeRate.toFixed(2) + '%</td><td>' + (inf ? '+' + inf.inflow.toFixed(2) + '\u4EBF' : '-') + '</td></tr>';
         });
         html += '</tbody></table>';
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">资金流出方向</h4>';
-        html += '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0;"><thead><tr style="background:#fef2f2;color:#991b1b;"><th>板块</th><th>跌幅</th><th>主力净流出</th></tr></thead><tbody>';
-        S.sectorOutflowTop5.forEach(function(s) {
-            html += '<tr><td><strong>' + s.name + '</strong></td><td class="fall">' + s.changeRate.toFixed(2) + '%</td><td class="fall">' + s.capitalFlow.toFixed(2) + '亿</td></tr>';
+        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">&#x1F4B0; \u6982\u5FF5\u677F\u5757\u70ED\u70B9TOP10</h4>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0;"><thead><tr style="background:#fef3c7;color:#92400e;"><th>\u6392\u540D</th><th>\u6982\u5FF5\u677F\u5757</th><th>\u5E45\u5EA6</th><th>\u4E3B\u529B\u51C0\u6D41\u5165</th><th>\u4E0A\u5E01\u6570</th></tr></thead><tbody>';
+        S.conceptHot.forEach(function(c) {
+            html += '<tr><td>' + c.rank + '</td><td><strong>' + c.name + '</strong></td><td class="rise">+' + c.changeRate.toFixed(2) + '%</td><td class="rise">+' + c.inflow.toFixed(2) + '\u4EBF</td><td style="color:#dc2626;font-weight:bold;">' + c.limitUp + '</td></tr>';
         });
         html += '</tbody></table>';
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">AI板块重点个股摘要</h4>';
+        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">&#x1F916; AI\u677F\u5757\u91CD\u70B9\u4E2A\u80A1\u6458\u8981</h4>';
         ST.aiStocks.forEach(function(st, i) {
-            html += '<p><strong>' + (i+1) + '. ' + st.name + '（' + st.code + '）</strong> ' + st.strengthRating + ' — ' + st.conclusion + '</p>';
+            html += '<p><strong>' + (i+1) + '. ' + st.name + ' \uFF08' + st.code + '\uFF09</strong> ' + st.strengthRating + ' \u2014 ' + st.conclusion + '</p>';
         });
         html += '<hr style="margin:12px 0;border:none;border-top:1px dashed #ccc;">';
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">操作建议</h4><ul>';
-        R.overallAnalysis.operationSuggestion.forEach(function(s){html += '<li>' + s + '</li>';});
-        html += '</ul><hr style="margin:12px 0;border:none;border-top:1px dashed #ccc;">';
-        html += '<p style="background:#fef3c7;padding:12px;border-radius:6px;font-weight:bold;color:#92400e;"><strong>核心摘要：</strong>' + R.getSummary() + '</p>';
-        html += '<p style="font-size:12px;color:#666;">数据来源：' + R.basicInfo.dataSource + ' | 生成时间：' + R.basicInfo.generateTime + '</p>';
+        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">&#x1F3AF; \u64CD\u4F5C\u5EFA\u8BAE</h4><ul>';
+        R.overallAnalysis.operationSuggestion.forEach(function(s) { html += '<li>' + s + '</li>'; });
+        html += '</ul>';
+        html += '<hr style="margin:12px 0;border:none;border-top:1px dashed #ccc;">';
+        html += '<p style="background:#fef3c7;padding:12px;border-radius:6px;font-weight:bold;color:#92400e;"><strong>&#x1F4CB; \u6838\u5FC3\u6458\u8981\uFF1A</strong>' + R.getSummary() + '</p>';
+        html += '<hr style="margin:12px 0;border:none;border-top:1px dashed #ccc;">';
+        html += '<p style="font-size:12px;color:#666;"><strong>\u6570\u636E\u6765\u6E90\uFF1A</strong>' + R.basicInfo.dataSource + '<br><strong>\u751F\u6210\u5E73\u53F0\uFF1A</strong>' + R.basicInfo.platform + '<br><strong>\u66F4\u65B0\u65F6\u95F4\uFF1A</strong>' + R.basicInfo.generateTime + '</p>';
         return html;
     }
 
+    // ---- \u4EA4\u4E92\u903B\u8F91 ----
     var isDark = false;
+    var currentFilter = 'none';
+    var sortState = {};
 
     document.getElementById('btnDarkMode').addEventListener('click', function() {
         isDark = !isDark;
         document.body.classList.toggle('dark', isDark);
-        this.textContent = isDark ? '☀️ 浅色模式' : '🌙 深色模式';
+        this.textContent = isDark ? '\u2600\uFE0F \u6D45\u8272\u6A21\u5F0F' : '\u1F319 \u6DF1\u8272\u6A21\u5F0F';
+        this.classList.toggle('active', isDark);
+        showToast(isDark ? '\u6DF1\u8272\u6A21\u5F0F\u5DF2\u5F00\u542F' : '\u6D45\u8272\u6A21\u5F0F\u5DF2\u5F00\u542F');
+    });
+
+    function applyFilter(filter) {
+        currentFilter = filter;
+        var rows = document.querySelectorAll('#stockTable tbody tr, #aiStockTable tbody tr');
+        rows.forEach(function(row) {
+            var show = true;
+            if (filter !== 'none') {
+                if (row.closest('table[data-no-filter]')) { show = true; }
+                else {
+                    var changeCell = row.cells[4];
+                    if (changeCell) {
+                        var cls = changeCell.className || '';
+                        var isRise = cls.indexOf('rise') > -1 || cls.indexOf('stock-positive') > -1;
+                        var isFall = cls.indexOf('fall') > -1 || cls.indexOf('stock-negative') > -1;
+                        if (filter === 'rise') show = isRise;
+                        if (filter === 'fall') show = isFall;
+                    } else { show = false; }
+                }
+            }
+            row.style.display = show ? '' : 'none';
+        });
+        ['btnRiseFilter','btnFallFilter','btnClearFilter'].forEach(function(id) { document.getElementById(id).classList.remove('active','active2'); });
+        if (filter === 'rise') document.getElementById('btnRiseFilter').classList.add('active2');
+        if (filter === 'fall') document.getElementById('btnFallFilter').classList.add('active');
+        document.getElementById('filterInfo').textContent = filter === 'none' ? '' : '\u5F53\u524D\u7B5B\u9009\uFF1A' + (filter === 'rise' ? '\u4EC5\u663E\u793A\u4E0A\u6DA8' : '\u4EC5\u663E\u793A\u4E0B\u8D25');
+    }
+
+    document.getElementById('btnRiseFilter').addEventListener('click', function() { applyFilter(currentFilter === 'rise' ? 'none' : 'rise'); });
+    document.getElementById('btnFallFilter').addEventListener('click', function() { applyFilter(currentFilter === 'fall' ? 'none' : 'fall'); });
+    document.getElementById('btnClearFilter').addEventListener('click', function() { applyFilter('none'); });
+
+    function sortTable(tableId, colIndex, isNumeric) {
+        var table = document.getElementById(tableId);
+        var tbody = table.querySelector('tbody');
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+        var dir = sortState[tableId] === 'asc' ? 'desc' : 'asc';
+        sortState[tableId] = dir;
+        rows.sort(function(a, b) {
+            var va = a.cells[colIndex].textContent.trim();
+            var vb = b.cells[colIndex].textContent.trim();
+            if (isNumeric) { va = parseFloat(va.replace(/[^\d.-]/g, '')) || 0; vb = parseFloat(vb.replace(/[^\d.-]/g, '')) || 0; }
+            if (va < vb) return dir === 'asc' ? -1 : 1;
+            if (va > vb) return dir === 'asc' ? 1 : -1;
+            return 0;
+        });
+        rows.forEach(function(r) { tbody.appendChild(r); });
+    }
+
+    document.getElementById('btnSortRank').addEventListener('click', function() { sortTable('stockTable', 0, true); showToast('\u5F3A\u52BF\u4E2A\u80A1\u5DF2\u6309\u6392\u540D\u6392\u5E8F'); });
+    document.getElementById('btnSortChange').addEventListener('click', function() { sortTable('stockTable', 4, true); showToast('\u5F3A\u52BF\u4E2A\u80A1\u5DF2\u6309\u4E0A\u6DA8\u5E45\u6392\u5E8F'); });
+    document.getElementById('btnSortInflow').addEventListener('click', function() { sortTable('capitalTable', 2, true); showToast('\u8D44\u91D1\u51C0\u6D41\u5165\u5DF2\u6309\u91D1\u989D\u6392\u5E8F'); });
+
+    var collapsed = false;
+    document.getElementById('btnCollapseAll').addEventListener('click', function() {
+        collapsed = !collapsed;
+        document.querySelectorAll('.card').forEach(function(card) { card.classList.toggle('collapsed', collapsed); });
+        this.textContent = collapsed ? '\u261D\uFE0F \u5C55\u5F00\u5168\u90E8' : '\u1F53D \u6298\u53E0\u5168\u90E8';
+        showToast(collapsed ? '\u5DF2\u6298\u53E0\u6240\u6709\u677F\u5757' : '\u5DF2\u5C55\u5F00\u6240\u6709\u677F\u5757');
     });
 
     document.getElementById('btnExport').addEventListener('click', function() {
-        var text = '【A股每日智能分析报告】\n报告日期：' + R.basicInfo.date + '\n\n【大盘走势】\n';
-        R.mainIndex.forEach(function(i){text+=i.indexName+'：'+i.closePrice+' ('+i.changeRate+')\n';});
-        text += '两市成交：'+R.marketEmotion.totalAmount+'亿\n\n【AI重点个股】\n';
-        ST.aiStocks.forEach(function(s,i){text+=(i+1)+'. '+s.name+' '+s.strengthRating+' '+(s.indicators.changeRate>=0?'+':'')+s.indicators.changeRate.toFixed(2)+'% 成交'+s.indicators.turnover.toFixed(2)+'亿\n';});
-        text += '\n【核心摘要】\n'+R.getSummary()+'\n';
-        var blob = new Blob(['\uFEFF'+text],{type:'text/plain;charset=utf-8'});
+        var date = R.basicInfo.date;
+        var summary = R.getSummary();
+        var text = '[\u80A1\u7968\u6BCF\u65E5\u667A\u80FD\u5206\u6790\u62A5\u544A]\n' + '\u2550'.repeat(40) + '\n' +
+            '\u62A5\u544A\u65E5\u671F\uFF1A' + date + '\n' + '\u2550'.repeat(40) + '\n\n' +
+            '[\u5927\u76D4\u8D70\u52BF]\n';
+        R.mainIndex.forEach(function(i) { text += i.indexName + '\uFF1A' + i.closePrice + ' (' + i.changeRate + ')\n'; });
+        text += '\u4E24\u5E02\u6210\u4EA4\u989D\uFF1A' + R.marketEmotion.totalAmount + '\u4EBF\n\n[\u70ED\u95E8\u677F\u5757\u4E0A\u6DA8\u699C]\n';
+        S.sectorRiseFall.forEach(function(s) { text += s.rank + '. ' + s.name + ' +' + s.changeRate.toFixed(2) + '%\n'; });
+        text += '\n[\u4E3B\u529B\u8D44\u91D1\u6D41\u5165]\n';
+        S.capitalInflowTop10.forEach(function(s) { text += s.rank + '. ' + s.name + ' +' + s.inflow.toFixed(2) + '\u4EBF\n'; });
+        text += '\n[\u6982\u5FF5\u677F\u5757\u70ED\u70B9]\n';
+        S.conceptHot.forEach(function(s) { text += s.rank + '. ' + s.name + ' +' + s.changeRate.toFixed(2) + '% | \u4E3B\u529B\u51C0\u6D41\u5165' + s.inflow.toFixed(2) + '\u4EBF\n'; });
+        text += '\n[AI\u677F\u5757\u91CD\u70B9\u4E2A\u80A1]\n';
+        ST.aiStocks.forEach(function(s, i) { text += (i+1) + '. ' + s.name + ' ' + s.strengthRating + ' ' + (s.indicators.changeRate>=0?'+':'') + s.indicators.changeRate.toFixed(2) + '% \u6210\u4EA4' + s.indicators.turnover.toFixed(2) + '\u4EBF\n'; });
+        text += '\n[\u64CD\u4F5C\u5EFA\u8BAE]\n';
+        R.overallAnalysis.operationSuggestion.forEach(function(s) { text += '- ' + s + '\n'; });
+        text += '\n[\u6838\u5FC3\u6458\u8981]\n' + summary + '\n';
+        text += '\n\u6570\u636E\u6765\u6E90\uFF1A' + R.basicInfo.dataSource + '\n';
+        var blob = new Blob(['\uFEFF' + text], { type: 'text/plain;charset=utf-8' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'A股分析报告_20260612.txt';
+        a.download = '\u80A1\u7968\u5206\u6790\u62A5\u544A_' + date.replace(/[^\d]/g, '') + '.txt';
         a.click();
+        showToast('\u62A5\u544A\u5DF2\u5BFC\u51FA\uFF01');
     });
+
+    // ---- \u5386\u53F2\u62A5\u544A\u52A0\u8F7D ----
+    function loadHistoryDates() {
+        var sel = document.getElementById('dateSelector');
+        sel.innerHTML = '<option value="">\u52A0\u8F7D\u4E2D...</option>';
+        var repo = 'keshihua';
+        var user = 'yourusername';
+        var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/contents';
+        fetch(apiUrl)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                var reports = data.filter(function(f) { return f.name.match(/^report_\d{8}\.html$/); })
+                    .map(function(f) { return f.name.replace('report_', '').replace('.html', ''); })
+                    .sort().reverse();
+                sel.innerHTML = '<option value="">-- \u9009\u62E9\u65E5\u671F --</option>';
+                reports.forEach(function(d) {
+                    var opt = document.createElement('option');
+                    opt.value = d;
+                    opt.textContent = d.substring(0, 4) + '-' + d.substring(4, 6) + '-' + d.substring(6, 8);
+                    sel.appendChild(opt);
+                });
+            })
+            .catch(function() {
+                sel.innerHTML = '<option value="">\u52A0\u8F7D\u5931\u8D25</option>';
+            });
+    }
+
+    document.getElementById('dateSelector').addEventListener('change', function() {
+        var d = this.value;
+        if (!d) return;
+        showToast('\u6B63\u5728\u52A0\u8F7D ' + d + ' \u62A5\u544A...');
+        window.open('report_' + d + '.html', '_blank');
+    });
+
+    function showToast(msg) {
+        var t = document.getElementById('toastEl');
+        if (!t) { t = document.createElement('div'); t.id = 'toastEl'; t.className = 'toast'; document.body.appendChild(t); }
+        t.textContent = msg; t.classList.add('show');
+        clearTimeout(t._timer); t._timer = setTimeout(function() { t.classList.remove('show'); }, 2200);
+    }
 
     function loadAll() {
         renderMarketTable(); renderEmotionTable(); renderMarketChart();
         renderSectorChart(); renderCapitalFlowChart(); renderCapitalTable();
-        renderAiStocks(); renderSemiconductorTable(); renderOperationAdvice();
-        renderStrongStocks(); renderLimitUpTable();
+        renderAiStocks(); renderSemiconductorTable(); renderConceptTable();
+        renderOperationAdvice(); renderStrongStocks(); renderLimitUpTable();
         document.getElementById('reportBox').innerHTML = buildReportHTML();
+        loadHistoryDates();
+        ['stockTable','capitalTable','aiStockTable'].forEach(function(tid) {
+            document.querySelectorAll('#' + tid + ' thead th').forEach(function(th) { th.classList.add('sortable'); });
+        });
     }
 
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', loadAll); } else { loadAll(); }
-})();
-
-// ── 历史报告日期选择器 ──
-(function(){
-    var sel = document.getElementById("dateSelector");
-    if (!sel) return;
-
-    var currentDate = null;
-    var verTag = document.getElementById("versionTag");
-    if (verTag) {
-        var m = verTag.textContent.match(/v(\d{8})/);
-        if (m) currentDate = m[1];
-    }
-    if (!currentDate) {
-        var note = document.querySelector(".data-source-note");
-        if (note) {
-            var m = note.textContent.match(/20\d{6}/g);
-            if (m) currentDate = m[m.length - 1];
-        }
-    }
-
-    function fmtDate(d) {
-        return d.substring(0,4) + "-" + d.substring(4,6) + "-" + d.substring(6,8);
-    }
-    function fmtWeekday(d) {
-        var s = fmtDate(d);
-        var dt = new Date(parseInt(s.substring(0,4)), parseInt(s.substring(5,7))-1, parseInt(s.substring(8,10)));
-        var days = ["周日","周一","周二","周三","周四","周五","周六"];
-        return days[dt.getDay()];
-    }
-
-    var baseUrl = location.pathname;
-
-    fetch("https://api.github.com/repos/13022940523/a-share-visualization/contents?ref=master", {
-        headers: {"Accept": "application/vnd.github.v3+json"}
-    }).then(function(r){ return r.json(); })
-    .then(function(files){
-        var reports = [];
-        if (Array.isArray(files)) {
-            files.forEach(function(f){
-                var m = f.name.match(/^report_(\d{8})\.html$/);
-                if (m) reports.push({date: m[1], name: f.name});
-            });
-        }
-        reports.sort(function(a,b){ return b.date.localeCompare(a.date); });
-
-        sel.innerHTML = "";
-        var latestOpt = document.createElement("option");
-        latestOpt.value = "";
-        latestOpt.textContent = "← 最新报告";
-        sel.appendChild(latestOpt);
-
-        if (reports.length > 0) {
-            reports.forEach(function(r){
-                var opt = document.createElement("option");
-                opt.value = "?date=" + r.date;
-                opt.textContent = fmtDate(r.date) + " " + fmtWeekday(r.date);
-                if (r.date === currentDate) opt.selected = true;
-                sel.appendChild(opt);
-            });
-            sel.onchange = function(){
-                var v = this.value;
-                if (v === "") {
-                    location.href = location.pathname;
-                } else {
-                    location.href = location.pathname + v;
-                }
-            };
-        } else {
-            var noOpt = document.createElement("option");
-            noOpt.value = "";
-            noOpt.textContent = "暂无可用历史";
-            sel.appendChild(noOpt);
-        }
-    }).catch(function(){
-        var errOpt = document.createElement("option");
-        errOpt.value = "";
-        errOpt.textContent = "加载失败";
-        sel.appendChild(errOpt);
-    });
 })();
 </script>
 <div class="toast" id="toastEl"></div>
