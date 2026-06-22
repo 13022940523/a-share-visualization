@@ -45,18 +45,9 @@
         .toolbar-btn:active { transform: translateY(0); }
         .btn-dark { background: #1e293b; color: #e2e8f0; }
         .btn-dark.active { background: #3b82f6; color: #fff; }
-        .btn-filter { background: #f1f5f9; color: #475569; }
-        .btn-filter.active { background: #dc2626; color: #fff; }
-        .btn-filter.active2 { background: #16a34a; color: #fff; }
         .btn-export { background: #f59e0b; color: #fff; }
-        .btn-sort { background: #e2e8f0; color: #475569; }
-        .btn-sort.active { background: #7c3aed; color: #fff; }
-        .btn-collapse { background: #e2e8f0; color: #475569; }
         body.dark .btn-dark { background: #334155; color: #e2e8f0; }
-        body.dark .btn-filter { background: #334155; color: #cbd5e1; }
-        body.dark .btn-sort { background: #334155; color: #cbd5e1; }
         body.dark .btn-export { background: #d97706; }
-        body.dark .btn-collapse { background: #334155; color: #cbd5e1; }
         .filter-info { font-size: 12px; color: #888; margin-bottom: 8px; }
         body.dark .filter-info { color: #94a3b8; }
         .card.collapsed .card-body { display: none; }
@@ -114,13 +105,6 @@
 
     <div class="toolbar">
         <button class="toolbar-btn btn-dark" id="btnDarkMode" title="切换深色模式">&#x1F319; 深色模式</button>
-        <button class="toolbar-btn btn-filter" id="btnRiseFilter" title="只看上涨个股">&#x1F4C8; 只看上涨</button>
-        <button class="toolbar-btn btn-filter" id="btnFallFilter" title="只看下跌个股">&#x1F4C9; 只看下跌</button>
-        <button class="toolbar-btn btn-filter" id="btnClearFilter" title="显示全部">&#x1F504; 显示全部</button>
-        <button class="toolbar-btn btn-sort" id="btnSortRank" title="按排名排序">&#x1F522; 按排名排序</button>
-        <button class="toolbar-btn btn-sort" id="btnSortChange" title="按涨跌幅排序">&#x1F4CA; 按涨跌幅排序</button>
-        <button class="toolbar-btn btn-sort" id="btnSortInflow" title="按资金净流入排序">&#x1F4B0; 按资金排序</button>
-        <button class="toolbar-btn btn-collapse" id="btnCollapseAll" title="折叠/展开全部">&#x1F53D; 折叠全部</button>
         <button class="toolbar-btn btn-export" id="btnExport" title="导出分析报告">&#x1F4E5; 导出报告</button>
         <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
             <label for="dateSelector" style="font-size:13px;color:#666;font-weight:500;">&#x1F4C5; 历史报告：</label>
@@ -129,7 +113,6 @@
             </select>
         </div>
     </div>
-    <div class="filter-info" id="filterInfo"></div>
 
     <div class="data-source-note">
         &#x26A0; <strong>数据来源：</strong>大盘分析（大盘行情分析报告）｜板块分析（A股热门板块分析_2026-06-20）｜个股分析（A股每日市场分析报告_20260622）｜数据截止日期：2026年6月20日
@@ -638,77 +621,14 @@ var stockAnalysisData = {
 
     // ---- \u4EA4\u4E92\u903B\u8F91 ----
     var isDark = false;
-    var currentFilter = 'none';
-    var sortState = {};
-
-    document.getElementById('btnDarkMode').addEventListener('click', function() {
+document.getElementById('btnDarkMode').addEventListener('click', function() {
         isDark = !isDark;
         document.body.classList.toggle('dark', isDark);
         this.textContent = isDark ? '\u2600\uFE0F \u6D45\u8272\u6A21\u5F0F' : '\u1F319 \u6DF1\u8272\u6A21\u5F0F';
         this.classList.toggle('active', isDark);
         showToast(isDark ? '\u6DF1\u8272\u6A21\u5F0F\u5DF2\u5F00\u542F' : '\u6D45\u8272\u6A21\u5F0F\u5DF2\u5F00\u542F');
     });
-
-    function applyFilter(filter) {
-        currentFilter = filter;
-        var rows = document.querySelectorAll('#stockTable tbody tr, #aiStockTable tbody tr');
-        rows.forEach(function(row) {
-            var show = true;
-            if (filter !== 'none') {
-                if (row.closest('table[data-no-filter]')) { show = true; }
-                else {
-                    var changeCell = row.cells[4];
-                    if (changeCell) {
-                        var cls = changeCell.className || '';
-                        var isRise = cls.indexOf('rise') > -1 || cls.indexOf('stock-positive') > -1;
-                        var isFall = cls.indexOf('fall') > -1 || cls.indexOf('stock-negative') > -1;
-                        if (filter === 'rise') show = isRise;
-                        if (filter === 'fall') show = isFall;
-                    } else { show = false; }
-                }
-            }
-            row.style.display = show ? '' : 'none';
-        });
-        ['btnRiseFilter','btnFallFilter','btnClearFilter'].forEach(function(id) { document.getElementById(id).classList.remove('active','active2'); });
-        if (filter === 'rise') document.getElementById('btnRiseFilter').classList.add('active2');
-        if (filter === 'fall') document.getElementById('btnFallFilter').classList.add('active');
-        document.getElementById('filterInfo').textContent = filter === 'none' ? '' : '\u5F53\u524D\u7B5B\u9009\uFF1A' + (filter === 'rise' ? '\u4EC5\u663E\u793A\u4E0A\u6DA8' : '\u4EC5\u663E\u793A\u4E0B\u8D25');
-    }
-
-    document.getElementById('btnRiseFilter').addEventListener('click', function() { applyFilter(currentFilter === 'rise' ? 'none' : 'rise'); });
-    document.getElementById('btnFallFilter').addEventListener('click', function() { applyFilter(currentFilter === 'fall' ? 'none' : 'fall'); });
-    document.getElementById('btnClearFilter').addEventListener('click', function() { applyFilter('none'); });
-
-    function sortTable(tableId, colIndex, isNumeric) {
-        var table = document.getElementById(tableId);
-        var tbody = table.querySelector('tbody');
-        var rows = Array.from(tbody.querySelectorAll('tr'));
-        var dir = sortState[tableId] === 'asc' ? 'desc' : 'asc';
-        sortState[tableId] = dir;
-        rows.sort(function(a, b) {
-            var va = a.cells[colIndex].textContent.trim();
-            var vb = b.cells[colIndex].textContent.trim();
-            if (isNumeric) { va = parseFloat(va.replace(/[^\d.-]/g, '')) || 0; vb = parseFloat(vb.replace(/[^\d.-]/g, '')) || 0; }
-            if (va < vb) return dir === 'asc' ? -1 : 1;
-            if (va > vb) return dir === 'asc' ? 1 : -1;
-            return 0;
-        });
-        rows.forEach(function(r) { tbody.appendChild(r); });
-    }
-
-    document.getElementById('btnSortRank').addEventListener('click', function() { sortTable('stockTable', 0, true); showToast('\u5F3A\u52BF\u4E2A\u80A1\u5DF2\u6309\u6392\u540D\u6392\u5E8F'); });
-    document.getElementById('btnSortChange').addEventListener('click', function() { sortTable('stockTable', 4, true); showToast('\u5F3A\u52BF\u4E2A\u80A1\u5DF2\u6309\u4E0A\u6DA8\u5E45\u6392\u5E8F'); });
-    document.getElementById('btnSortInflow').addEventListener('click', function() { sortTable('capitalTable', 3, true); showToast('\u8D44\u91D1\u51C0\u6D41\u5165\u5DF2\u6309\u91D1\u989D\u6392\u5E8F'); });
-
-    var collapsed = false;
-    document.getElementById('btnCollapseAll').addEventListener('click', function() {
-        collapsed = !collapsed;
-        document.querySelectorAll('.card').forEach(function(card) { card.classList.toggle('collapsed', collapsed); });
-        this.textContent = collapsed ? '\u261D\uFE0F \u5C55\u5F00\u5168\u90E8' : '\u1F53D \u6298\u53E0\u5168\u90E8';
-        showToast(collapsed ? '\u5DF2\u6298\u53E0\u6240\u6709\u677F\u5757' : '\u5DF2\u5C55\u5F00\u6240\u6709\u677F\u5757');
-    });
-
-    document.getElementById('btnExport').addEventListener('click', function() {
+document.getElementById('btnExport').addEventListener('click', function() {
         var date = R.basicInfo.date;
         var summary = R.getSummary();
         var text = '[\u80A1\u7968\u6BCF\u65E5\u667A\u80FD\u5206\u6790\u62A5\u544A]\n' + '\u2550'.repeat(40) + '\n' +
