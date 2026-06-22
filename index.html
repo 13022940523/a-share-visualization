@@ -8,6 +8,21 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js?t=20260620"></script>
+    <!-- AI Chat Panel -->
+    <div id="aiChatPanel">
+        <div class="chat-header">
+            <div class="chat-title">&#x1F916; AI智能助手 <span style="font-size:11px;opacity:0.8;">(DeepSeek)</span></div>
+            <button class="chat-close" id="chatClose" title="关闭">&#x2715;</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-msg assistant">您好！我是AI智能助手，可以帮您分析当前A股市场数据。请随时问我任何关于行情、板块或个股的问题。</div>
+        </div>
+        <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="输入问题，按 Enter 发送..." autocomplete="off" />
+            <button id="chatSend">发送</button>
+        </div>
+    </div>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft YaHei", sans-serif; }
         body { background-color: #f0f2f5; color: #333; padding: 20px; transition: background 0.3s, color 0.3s; }
@@ -133,6 +148,41 @@
         .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
         .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+        /* ---- AI Chat ---- */
+        .btn-chat { background: #7c3aed; color: #fff; }
+        .btn-chat:hover { background: #6d28d9; }
+        body.dark .btn-chat { background: #6d28d9; }
+        #aiChatPanel { display: none; position: fixed; bottom: 70px; right: 20px; width: 420px; max-width: calc(100vw - 40px); height: 560px; max-height: calc(100vh - 120px); background: #fff; border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); z-index: 10000; flex-direction: column; overflow: hidden; font-family: "Microsoft YaHei", sans-serif; }
+        #aiChatPanel.open { display: flex; }
+        body.dark #aiChatPanel { background: #1e293b; border: 1px solid #334155; }
+        .chat-header { padding: 14px 16px; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+        .chat-header .chat-title { display: flex; align-items: center; gap: 8px; }
+        .chat-close { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; padding: 0; line-height: 1; opacity: 0.8; }
+        .chat-close:hover { opacity: 1; }
+        .chat-body { flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+        .chat-body::-webkit-scrollbar { width: 4px; }
+        .chat-body::-webkit-scrollbar-thumb { background: #c4b5fd; border-radius: 2px; }
+        .chat-msg { max-width: 82%; padding: 9px 13px; border-radius: 12px; font-size: 13px; line-height: 1.5; word-break: break-word; }
+        .chat-msg.user { align-self: flex-end; background: #7c3aed; color: #fff; border-bottom-right-radius: 4px; }
+        .chat-msg.assistant { align-self: flex-start; background: #f1f5f9; color: #1e293b; border-bottom-left-radius: 4px; }
+        body.dark .chat-msg.assistant { background: #334155; color: #e2e8f0; }
+        .chat-msg.loading { color: #94a3b8; font-style: italic; }
+        .chat-msg.error { color: #dc2626; font-size: 12px; }
+        .chat-input-row { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid #e5e7eb; flex-shrink: 0; }
+        body.dark .chat-input-row { border-top-color: #334155; }
+        #chatInput { flex: 1; padding: 9px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-family: "Microsoft YaHei", sans-serif; resize: none; outline: none; background: #f9fafb; color: #1e293b; }
+        body.dark #chatInput { background: #334155; border-color: #475569; color: #e2e8f0; }
+        #chatInput:focus { border-color: #7c3aed; }
+        #chatSend { padding: 9px 16px; background: #7c3aed; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: "Microsoft YaHei", sans-serif; font-weight: 500; flex-shrink: 0; }
+        #chatSend:hover { background: #6d28d9; }
+        #chatSend:disabled { background: #94a3b8; cursor: not-allowed; }
+        body.dark #chatSend { background: #6d28d9; }
+        .typing-indicator { display: flex; gap: 4px; padding: 10px 14px; background: #f1f5f9; border-radius: 12px; border-bottom-left-radius: 4px; align-self: flex-start; }
+        body.dark .typing-indicator { background: #334155; }
+        .typing-indicator span { width: 6px; height: 6px; background: #94a3b8; border-radius: 50%; animation: typing 1.2s infinite; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
 </style>
 </head>
 <body>
@@ -145,6 +195,7 @@
     <div class="toolbar">
         <button class="toolbar-btn btn-dark" id="btnDarkMode" title="切换深色模式">&#x1F319; 深色模式</button>
         <button class="toolbar-btn btn-export" id="btnExport" title="导出分析报告">&#x1F4E5; 导出报告</button>
+        <button class="toolbar-btn btn-chat" id="btnAIChat" title="AI智能对话" style="background:#7c3aed;color:#fff;">&#x1F916; AI对话</button>
         <button class="toolbar-btn btn-chat" id="btnAIChat" title="AI智能对话" style="background:#7c3aed;color:#fff;">&#x1F916; AI对话</button>
         
         <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
@@ -676,6 +727,105 @@ document.getElementById('btnExport').addEventListener('click', function() {
             '\u62A5\u544A\u65E5\u671F\uFF1A' + date + '\n' + '\u2550'.repeat(40) + '\n\n' +
             '[\u5927\u76D8\u8D70\u52BF]\n';
         R.mainIndex.forEach(function(i) { text += i.indexName + '\uFF1A' + i.closePrice + ' (' + i.changeRate + ')\n'; });
+
+    // ---- AI Chat ----
+    (function() {
+        var API_KEY = "sk-ec6b2e1cd54e48b09513f6f08c336606";
+        var API_URL = "https://api.deepseek.com/chat/completions";
+        var messages = [];
+
+        var panel = document.getElementById("aiChatPanel");
+        var body = document.getElementById("chatBody");
+        var input = document.getElementById("chatInput");
+        var sendBtn = document.getElementById("chatSend");
+        var btnChat = document.getElementById("btnAIChat");
+
+        if (!panel) return;
+
+        function getMarketContext() {
+            try { return "当前市场数据（来自页面）：" + (typeof R !== "undefined" ? R.getSummary() : "无法获取"); } catch(e) { return ""; }
+        }
+
+        function appendMsg(role, content) {
+            var div = document.createElement("div");
+            div.className = "chat-msg " + role;
+            div.textContent = content;
+            body.appendChild(div);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function showTyping() {
+            var div = document.createElement("div");
+            div.className = "typing-indicator";
+            div.id = "typingEl";
+            div.innerHTML = "<span></span><span></span><span></span>";
+            body.appendChild(div);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function removeTyping() {
+            var el = document.getElementById("typingEl");
+            if (el) el.remove();
+        }
+
+        function sendToDeepSeek(userMsg) {
+            appendMsg("user", userMsg);
+            messages.push({ role: "user", content: userMsg });
+            showTyping();
+            sendBtn.disabled = true;
+            input.disabled = true;
+
+            var systemPrompt = "你是一个专业的A股市场分析助手。用户会询问关于今日A股行情、板块轮动、个股分析等问题。请结合市场数据回答，回答要简洁、专业、有参考价值。分析日期：2026年6月20日。" + getMarketContext();
+            var allMessages = [{ role: "system", content: systemPrompt }].concat(messages);
+
+            fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + API_KEY },
+                body: JSON.stringify({ model: "deepseek-chat", messages: allMessages, temperature: 0.7, max_tokens: 800 })
+            }).then(function(res) {
+                removeTyping();
+                if (!res.ok) throw new Error("API请求失败（" + res.status + "）");
+                return res.json();
+            }).then(function(data) {
+                var reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || "抱歉，暂时无法回答。";
+                appendMsg("assistant", reply);
+                messages.push({ role: "assistant", content: reply });
+            }).catch(function(err) {
+                removeTyping();
+                var div = document.createElement("div");
+                div.className = "chat-msg error";
+                div.textContent = "⚠ 请求失败：" + err.message;
+                body.appendChild(div);
+                body.scrollTop = body.scrollHeight;
+            }).finally(function() {
+                sendBtn.disabled = false;
+                input.disabled = false;
+                input.focus();
+            });
+        }
+
+        function handleSend() {
+            var text = input.value.trim();
+            if (!text) return;
+            input.value = "";
+            sendToDeepSeek(text);
+        }
+
+        btnChat.addEventListener("click", function() {
+            panel.classList.add("open");
+            input.focus();
+        });
+
+        document.getElementById("chatClose").addEventListener("click", function() {
+            panel.classList.remove("open");
+        });
+
+        sendBtn.addEventListener("click", handleSend);
+        input.addEventListener("keydown", function(e) {
+            if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
+        });
+    })();
+
 
     // ---- AI Chat ----
     (function() {
