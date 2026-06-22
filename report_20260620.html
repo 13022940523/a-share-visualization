@@ -132,7 +132,7 @@
     <div class="filter-info" id="filterInfo"></div>
 
     <div class="data-source-note">
-        &#x26A0; <strong>数据来源：</strong>大盘分析（大盘行情分析报告）｜板块分析（A股热门板块分析_2026-06-20）｜个股分析（A股每日市场分析报告_20260621）｜数据截止日期：2026年6月20日
+        &#x26A0; <strong>数据来源：</strong>大盘分析（大盘行情分析报告）｜板块分析（A股热门板块分析_2026-06-20）｜个股分析（A股每日市场分析报告_20260622）｜数据截止日期：2026年6月20日
     </div>
 
     <div class="grid-row">
@@ -235,7 +235,7 @@
 var marketAnalysisReport = {
     basicInfo: {
         date: '2026年6月20日',
-        generateTime: '2026-06-21 23:00',
+        generateTime: '2026-06-22 10:00',
         dataSource: '同花顺问财 + akshare + THSDK',
         platform: 'OpenClaw 大盘分析员 + 板块分析员 + 个股分析员'
     },
@@ -247,93 +247,93 @@ var marketAnalysisReport = {
     marketEmotion: {
         upCount: 3200, downCount: 2000, flatCount: 85,
         limitUp: 80, totalAmount: 32000,
-        conclusion: '市场呈现明显结构性分化，中小创强于大盘蓝筹。创业板指涨幅超2%，科技成长板块受资金追捧。上证指数微跌-0.09%，传统周期金融板块表现疲弱。AI算力产业链全线爆发，多只半导体、AI个股涨停，赚钱效应显著。北向资金加仓科技成长方向，流动性充裕。'
+        conclusion: '市场呈现明显结构性分化，中小创强于大盘蓝筹。创业板指涨幅超2%，科技成长板块受资金追捧。上证指数微跌-0.09%，传统周期金融板块表现疲弱。AI算力产业链全线爆发，半导体、AI个股强势，赚钱效应显著。'
     },
     overallAnalysis: {
         features: [
             '结构性分化：中小创强势 vs 大盘蓝筹承压',
             '科技成长占优：创业板+2.38%、深成指+1.29%显著跑赢上证',
-            'AI产业链爆发：AI应用+20.03%、存储芯片+14.20%、半导体+7.33%',
-            '资金高度集中：寒武纪+中际旭创合计主力净流入超92亿'
+            'AI产业链爆发：半导体、AI应用、光模块板块强势',
+            '资金高度集中：科技成长板块主力资金大幅流入'
         ],
         trendJudgment: { shortTerm: '震荡上行，科技成长主线清晰', riskTip: '科技股短期涨幅较大，存在获利回吐压力；关注板块轮动节奏' },
         operationSuggestion: [
             '超配科技成长：AI算力（寒武纪/中际旭创/海光信息）+ 半导体（兆易创新/北方华创）',
             '中线布局国产替代：存储芯片、设备材料国产化进程加速，受益确定性强',
-            '短线谨慎追高：寒武纪单日+14.20%、北京君正+8.36%，短期涨幅较大注意回调',
+            '短线谨慎追高：部分个股短期涨幅较大注意回调风险',
             '控制仓位5-6成：科技板块成交活跃但波动加大，合理控制仓位',
             '回避传统防御板块：煤炭、银行、消费等表现疲弱，暂不建议配置'
         ]
     },
     getSummary: function() {
-        return '2026年6月20日A股结构性分化，上证指数微跌-0.09%报4090.48点，深证成指+1.29%，创业板指+2.38%领涨。AI产业链全面爆发：AI应用+20.03%、存储芯片+14.20%、生物制品+19.41%领涨。寒武纪大涨14.20%主力净流入46.58亿，中际旭创+7.19%净流入46.14亿。操作上建议超配AI算力与半导体主线，短线关注回调低吸机会，避免追高。';
+        return '2026年6月20日A股结构性分化，上证指数微跌-0.09%报4090.48点，深证成指+1.29%，创业板指+2.38%领涨。AI产业链全面爆发：半导体、AI应用、光模块板块强势。操作上建议超配AI算力与半导体主线，短线关注回调低吸机会，避免追高。';
     }
 };
 
 var sectorAnalysisData = {
     analysisDate: '2026-06-20',
     sectorRiseFall: [
-        { rank: 1, name: '生物制品', changeRate: 19.41 },
-        { rank: 2, name: '半导体', changeRate: 7.33 },
-        { rank: 3, name: '通信设备', changeRate: 7.19 },
-        { rank: 4, name: 'AI应用', changeRate: 20.03 },
-        { rank: 5, name: '存储芯片', changeRate: 14.20 },
-        { rank: 6, name: 'CPO概念', changeRate: 20.02 },
-        { rank: 7, name: '专精特新', changeRate: 20.95 },
-        { rank: 8, name: 'AI芯片', changeRate: 20.00 },
-        { rank: 9, name: '创新药', changeRate: 20.00 },
-        { rank: 10, name: '半导体材料', changeRate: 20.01 }
+        { rank: 1, name: '半导体', changeRate: 7.33 },
+        { rank: 2, name: '通信设备', changeRate: 7.19 },
+        { rank: 3, name: '光伏设备', changeRate: 9.12 },
+        { rank: 4, name: '小金属', changeRate: 8.72 },
+        { rank: 5, name: 'AI/人工智能', changeRate: 5.23 },
+        { rank: 6, name: '锂电池', changeRate: 5.90 },
+        { rank: 7, name: '军工装备', changeRate: 6.88 },
+        { rank: 8, name: '非金属材料', changeRate: 20.00 },
+        { rank: 9, name: '化学原料', changeRate: 8.72 },
+        { rank: 10, name: '化学制药', changeRate: 19.99 }
     ],
     capitalInflowTop10: [
-        { rank: 1, name: '寒武纪', industry: '半导体-存储芯片', inflow: 46.58, changeRate: '+14.20%' },
-        { rank: 2, name: '中际旭创', industry: '通信-通信设备', inflow: 46.14, changeRate: '+7.19%' },
-        { rank: 3, name: '兆易创新', industry: '半导体-存储芯片', inflow: 30.83, changeRate: '+7.33%' },
-        { rank: 4, name: '工商银行', industry: '金融-银行', inflow: 21.17, changeRate: '+7.49%' },
-        { rank: 5, name: '海光信息', industry: '半导体-存储芯片', inflow: 16.68, changeRate: '+6.42%' },
-        { rank: 6, name: '新易盛', industry: '通信-通信设备', inflow: 13.93, changeRate: '+4.23%' },
-        { rank: 7, name: '立讯精密', industry: '电子-消费电子', inflow: 10.87, changeRate: '+3.88%' },
-        { rank: 8, name: '中芯国际', industry: '半导体-集成电路', inflow: 10.12, changeRate: '+4.45%' },
-        { rank: 9, name: '东山精密', industry: '电子-印制电路板', inflow: 9.79, changeRate: '+6.26%' },
-        { rank: 10, name: '北京君正', industry: '半导体-存储芯片', inflow: 9.71, changeRate: '+8.36%' }
+        { rank: 1, name: '源杰科技', industry: '半导体', inflow: 4.51, changeRate: '+11.88%' },
+        { rank: 2, name: '红星发展', industry: '化学原料', inflow: 4.02, changeRate: '+8.72%' },
+        { rank: 3, name: '兆易创新', industry: '半导体', inflow: 3.30, changeRate: '+6.20%' },
+        { rank: 4, name: '阳光电源', industry: '光伏设备', inflow: 9.90, changeRate: '+9.12%' },
+        { rank: 5, name: '江波龙', industry: '半导体', inflow: 2.81, changeRate: '+5.33%' },
+        { rank: 6, name: '中微公司', industry: '半导体', inflow: 2.30, changeRate: '+6.34%' },
+        { rank: 7, name: '长电科技', industry: '半导体', inflow: 2.25, changeRate: '+6.88%' },
+        { rank: 8, name: '力量钻石', industry: '非金属材料', inflow: 2.61, changeRate: '+20.00%' },
+        { rank: 9, name: '花园生物', industry: '化学制药', inflow: 0.87, changeRate: '+19.99%' },
+        { rank: 10, name: '德明利', industry: '半导体', inflow: 2.12, changeRate: '+3.27%' }
     ],
     conceptHot: [
-        { rank: 1, name: '人工智能/AI', leader: '东方国信+20.03%', changeRate: 20.03 },
-        { rank: 2, name: 'CPO/光模块', leader: '恒合股份+21.67%', changeRate: 21.67 },
-        { rank: 3, name: '专精特新', leader: '华岭股份+20.95%', changeRate: 20.95 },
-        { rank: 4, name: '半导体材料', leader: '晶升股份+20.01%', changeRate: 20.01 },
-        { rank: 5, name: 'AI芯片', leader: '芯海科技+20.00%', changeRate: 20.00 },
-        { rank: 6, name: '存储芯片', leader: '寒武纪+14.20%', changeRate: 14.20 },
-        { rank: 7, name: '创新药', leader: '爱朋医疗+20.00%', changeRate: 20.00 },
-        { rank: 8, name: '生物制品', leader: '诺思兰德+19.41%', changeRate: 19.41 },
-        { rank: 9, name: 'PCB概念', leader: '富特科技+20.00%', changeRate: 20.00 },
-        { rank: 10, name: '5G/通信', leader: '控制科技+20.02%', changeRate: 20.02 }
+        { rank: 1, name: '半导体芯片', leader: '源杰科技+11.88%', changeRate: 11.88 },
+        { rank: 2, name: '光伏设备', leader: '阳光电源+9.12%', changeRate: 9.12 },
+        { rank: 3, name: '小金属', leader: '红星发展+8.72%', changeRate: 8.72 },
+        { rank: 4, name: '通信设备', leader: '中际旭创+2.93%', changeRate: 7.19 },
+        { rank: 5, name: 'AI芯片', leader: '寒武纪-1.64%', changeRate: 5.23 },
+        { rank: 6, name: '存储芯片', leader: '兆易创新+5.51%', changeRate: 6.20 },
+        { rank: 7, name: '锂电池', leader: '湖南裕能+5.90%', changeRate: 5.90 },
+        { rank: 8, name: '化学制药', leader: '花园生物+19.99%', changeRate: 19.99 },
+        { rank: 9, name: '非金属材料', leader: '力量钻石+20.00%', changeRate: 20.00 },
+        { rank: 10, name: '军工装备', leader: '菲利华+3.88%', changeRate: 6.88 }
     ],
     semiconductorStocks: [
-        { code: '688256.SH', name: '寒武纪', changeRate: '+14.20%', turnover: '82.7亿', capitalFlow: '+46.58亿', subSector: 'AI芯片/存储' },
-        { code: '603986.SH', name: '兆易创新', changeRate: '+7.33%', turnover: '40亿+', capitalFlow: '+30.83亿', subSector: '存储芯片' },
-        { code: '688041.SH', name: '海光信息', changeRate: '+6.42%', turnover: '30亿+', capitalFlow: '+16.68亿', subSector: '国产CPU/DCU' },
-        { code: '688981.SH', name: '中芯国际', changeRate: '+4.45%', turnover: '50亿+', capitalFlow: '+10.12亿', subSector: '集成电路制造' },
-        { code: '300223.SZ', name: '北京君正', changeRate: '+8.36%', turnover: '106.6亿', capitalFlow: '+9.71亿', subSector: '存储芯片' },
-        { code: '002371.SZ', name: '北方华创', changeRate: '+2.39%', turnover: '75.3亿', capitalFlow: '+4.23亿', subSector: '半导体设备' }
+        { code: '688498.SH', name: '源杰科技', changeRate: '+11.88%', turnover: '约20亿', capitalFlow: '+4.51亿', subSector: '光芯片/激光器' },
+        { code: '603986.SH', name: '兆易创新', changeRate: '+5.51%', turnover: '约40亿', capitalFlow: '+3.30亿', subSector: '存储芯片/MCU' },
+        { code: '688012.SH', name: '中微公司', changeRate: '+6.34%', turnover: '约15亿', capitalFlow: '+2.30亿', subSector: '半导体设备' },
+        { code: '600584.SH', name: '长电科技', changeRate: '+6.88%', turnover: '约25亿', capitalFlow: '+2.25亿', subSector: '封测龙头' },
+        { code: '301308.SZ', name: '江波龙', changeRate: '+5.33%', turnover: '约18亿', capitalFlow: '+2.81亿', subSector: '存储模组' },
+        { code: '001309.SZ', name: '德明利', changeRate: '+3.27%', turnover: '约10亿', capitalFlow: '+2.12亿', subSector: '存储芯片' }
     ],
     strongStocks: [
-        { rank: 1, code: '920083.BJ', name: '恒合股份', latestPrice: '-', riseFall: '+21.67%', concept: 'CPO+专精特新' },
-        { rank: 2, code: '920009.BJ', name: '华岭股份', latestPrice: '-', riseFall: '+20.95%', concept: '专精特新+人工智能' },
-        { rank: 3, code: '300166.SZ', name: '东方国信', latestPrice: '-', riseFall: '+20.03%', concept: '人工智能+AI应用' },
-        { rank: 4, code: '300319.SZ', name: '控制科技', latestPrice: '-', riseFall: '+20.02%', concept: 'CPO+AI芯片' },
-        { rank: 5, code: '688485.SH', name: '九州一轨', latestPrice: '-', riseFall: '+20.01%', concept: '专精特新' },
-        { rank: 6, code: '688478.SH', name: '晶升股份', latestPrice: '-', riseFall: '+20.01%', concept: '半导体材料+存储芯片' },
-        { rank: 7, code: '688256.SH', name: '寒武纪', latestPrice: '1507.46', riseFall: '+14.20%', concept: 'AI芯片龙头' },
-        { rank: 8, code: '300943.SZ', name: '芯海科技', latestPrice: '-', riseFall: '+20.00%', concept: 'AI芯片+物联网' },
-        { rank: 9, code: '300223.SZ', name: '北京君正', latestPrice: '186.05', riseFall: '+8.36%', concept: '存储芯片+汽车电子' },
-        { rank: 10, code: '603986.SH', name: '兆易创新', latestPrice: '629.00', riseFall: '+7.33%', concept: '存储芯片+MCU' }
+        { rank: 1, code: '301071.SZ', name: '力量钻石', latestPrice: '-', riseFall: '+20.00%', concept: '非金属材料+人造钻石' },
+        { rank: 2, code: '300401.SZ', name: '花园生物', latestPrice: '-', riseFall: '+19.99%', concept: '化学制药+维生素' },
+        { rank: 3, code: '688498.SH', name: '源杰科技', latestPrice: '-', riseFall: '+11.88%', concept: '半导体+光芯片' },
+        { rank: 4, code: '300776.SZ', name: '帝尔激光', latestPrice: '-', riseFall: '+9.71%', concept: '光伏设备+激光' },
+        { rank: 5, code: '300274.SZ', name: '阳光电源', latestPrice: '-', riseFall: '+9.12%', concept: '光伏设备+逆变器' },
+        { rank: 6, code: '300316.SZ', name: '晶盛机电', latestPrice: '-', riseFall: '+7.01%', concept: '光伏设备+半导体设备' },
+        { rank: 7, code: '600584.SH', name: '长电科技', latestPrice: '-', riseFall: '+6.88%', concept: '半导体封测' },
+        { rank: 8, code: '688012.SH', name: '中微公司', latestPrice: '-', riseFall: '+6.34%', concept: '半导体设备' },
+        { rank: 9, code: '603986.SH', name: '兆易创新', latestPrice: '663.67', riseFall: '+5.51%', concept: '存储芯片+MCU' },
+        { rank: 10, code: '301358.SZ', name: '湖南裕能', latestPrice: '-', riseFall: '+5.90%', concept: '锂电池正极材料' }
     ],
     limitUpReasons: [
-        { rank: 1, name: 'AI人工智能全线爆发', leader: '东方国信+20.03%、控制科技+20.02%、芯海科技+20.00%', driver: 'ChatGPT/AIGC/AI应用持续发酵，算力需求爆发' },
-        { rank: 2, name: '半导体芯片全面走强', leader: '寒武纪+14.20%、兆易创新+7.33%、北京君正+8.36%、北方华创+2.39%', driver: '存储芯片周期复苏+AI服务器需求拉动+国产替代深化' },
-        { rank: 3, name: 'CPO/光模块概念', leader: '恒合股份+21.67%、控制科技+20.02%', driver: 'AI算力驱动800G/1.6T光模块需求爆发' },
-        { rank: 4, name: '专精特新/科创板', leader: '华岭股份+20.95%、九州一轨+20.01%', driver: '北交所、科创板专精特新企业受资金追捧' },
-        { rank: 5, name: '生物制品/创新药', leader: '诺思兰德+19.41%、万泽股份+32.36%、荣昌生物+114.48%', driver: '防御性配置+板块补涨需求' }
+        { rank: 1, name: '半导体芯片全面走强', leader: '源杰科技+11.88%、兆易创新+5.51%、长电科技+6.88%', driver: '存储芯片周期复苏+AI服务器需求拉动+国产替代深化' },
+        { rank: 2, name: '光伏设备强势反弹', leader: '阳光电源+9.12%、帝尔激光+9.71%、晶盛机电+7.01%', driver: '光伏装机需求回暖+逆变器出口增长+资金回流新能源' },
+        { rank: 3, name: '小金属/资源板块', leader: '红星发展+8.72%、中钨高新、厦门钨业', driver: '稀有金属需求增加+钼钨价格上涨+资源安全战略' },
+        { rank: 4, name: '通信设备/AI算力', leader: '中际旭创+2.93%、亨通光电、中兴通讯', driver: 'AI算力需求爆发+800G光模块放量+数据中心建设加速' },
+        { rank: 5, name: '锂电池板块企稳', leader: '湖南裕能+5.90%、格林美+3.50%', driver: '新能源车销量回暖+储能需求增长+板块超跌反弹' }
     ]
 };
 
@@ -347,40 +347,40 @@ var stockAnalysisData = {
     aiStocks: [
         {
             code: '688256.SH', name: '寒武纪', type: 'AI芯片龙头',
-            indicators: { closePrice: 1507.46, changeRate: 14.20, turnover: 82.70 },
+            indicators: { closePrice: 1482.79, changeRate: -1.64, turnover: 82.70 },
             strengthRating: '\u2605\u2605\u2605\u2605\u2606',
-            conclusion: '强势突破 — 单日大涨14.20%创近期新高，成交额82.7亿，主力净流入46.58亿天量资金抢筹。突破前期震荡区间，有望开启新一轮上涨。AI算力需求爆发，公司AI芯片产品直接受益。短期强势显著，注意技术性回调风险。'
+            conclusion: '缩量回调 — 单日微跌-1.64%，成交额82.7亿，量比仅0.34显示短期做多意愿减弱。股价位于MA5/MA10/MA20上方，均线多头排列，中期趋势向上。MACD金叉持续，中期动能强劲。J值超100，短期存在技术性回调压力。建议中线持有，回调至MA5（1390元）附近低吸。'
         },
         {
             code: '300308.SZ', name: '中际旭创', type: 'CPO/光模块龙头',
-            indicators: { closePrice: 1367.88, changeRate: 7.19, turnover: 50.00 },
+            indicators: { closePrice: 1408.00, changeRate: 2.93, turnover: 50.00 },
             strengthRating: '\u2605\u2605\u2605\u2605\u2606',
-            conclusion: '稳健上行 — 涨幅7.19%，趋势完好。主力净流入46.14亿，仅次于寒武纪，资金认可度高。全球光模块龙头，AI数据中心800G/1.6T光模块核心供应商。均线多头排列，上升通道完整，中线配置首选。'
+            conclusion: '强势上行 — 涨幅+2.93%，趋势完好。股价位于所有均线上方，均线多头排列，趋势极强。MACD金叉且数值高达88.33，中期上涨动能充沛。RSI超71进入超买区，J值超115，短期严重超买。价格位置99.2%，接近20日最高点，回调压力大。中线持有，短线不宜追高。'
         },
         {
             code: '688041.SH', name: '海光信息', type: '国产CPU/DCU龙头',
-            indicators: { closePrice: 328.00, changeRate: 6.42, turnover: 30.00 },
+            indicators: { closePrice: 333.32, changeRate: 1.62, turnover: 30.00 },
             strengthRating: '\u2605\u2605\u2605\u2605\u2606',
-            conclusion: '稳健上攻 — 涨幅6.42%，走势强于大盘。主力净流入16.68亿。国产CPU/DCU稀缺标的，AI服务器核心供应商。突破年线压力，中期趋势转强。MACD金叉向上，适合中线布局国产替代主线。'
+            conclusion: '稳健上攻 — 涨幅+1.62%，走势强于大盘。股价位于均线上方，中期趋势向上。国产替代加速，信创产业政策支持力度大。RSI超70进入超买区，短期回调压力大。缩量上涨，量比仅0.39，上涨动能不足。中线布局国产替代主线，等回调至MA5（313元）附近低吸。'
         },
         {
             code: '603986.SH', name: '兆易创新', type: '存储芯片龙头',
-            indicators: { closePrice: 629.00, changeRate: 7.33, turnover: 40.00 },
+            indicators: { closePrice: 663.67, changeRate: 5.51, turnover: 40.00 },
             strengthRating: '\u2605\u2605\u2605\u2605\u2606',
-            conclusion: '底部反转 — 涨幅7.33%领涨存储芯片板块，主力净流入30.83亿。存储芯片周期复苏，AI服务器需求拉动。底部反转形态确立，均线系统多头排列，RSI进入强势区。中线持有，关注存储芯片价格走势。'
+            conclusion: '强势领涨 — 单日大涨+5.51%，领涨存储芯片板块，趋势极强。存储芯片周期复苏，AI服务器需求拉动。RSI近78，严重超买，短期回调压力大。价格位置97.2%，接近20日最高点。中线持有，短线不追高，等回调至MA10（535元）附近再介入。'
         },
         {
             code: '300223.SZ', name: '北京君正', type: '存储芯片细分龙头',
-            indicators: { closePrice: 186.05, changeRate: 8.36, turnover: 106.60 },
+            indicators: { closePrice: 187.12, changeRate: 0.58, turnover: 106.60 },
             strengthRating: '\u2605\u2605\u2605\u2606\u2606',
-            conclusion: '放量突破 — 涨幅8.36%，成交额106.6亿破百亿，市场关注度极高。汽车电子、物联网芯片细分领域龙头。放量突破前期平台，短期动能强劲，但需注意获利回吐压力。'
+            conclusion: '缩量上涨 — 涨幅+0.58%，成交额106.6亿。股价位于均线上方，中期趋势向上。汽车电子、物联网需求复苏，公司业绩改善。RSI超71，进入超买区，短期动能减弱。量比0.41，缩量上涨，持续性待观察。中线持有，等回调至MA10（162元）附近再介入。'
         }
     ],
     operationAdvice: {
         positionControl: '科技板块成交活跃但波动加大，建议控制仓位在5-6成，以AI算力与半导体龙头为主',
         defenseFocus: '防御性配置可关注工商银行等低估值蓝筹，但整体不建议大幅配置传统板块',
         aiStockStrategy: 'AI算力基础设施（中际旭创/寒武纪）> AI芯片（海光信息）> 存储芯片（兆易创新/北京君正），资金偏好明确',
-        riskTip: '科技股短期涨幅较大（寒武纪+14.20%，北京君正+8.36%），存在技术性回调风险。科创板、创业板流动性相对较弱。关注存储芯片周期波动及地缘政治风险。'
+        riskTip: '科技股RSI均超过67，其中4只超70进入超买区。量比均在0.34-0.41，缩量上涨，持续性存疑。价格位置均在83%以上，部分接近20日最高点，短期回调压力大。'
     },
     calculateSentimentScore: function() {
         var s = this.marketSentiment;
@@ -607,7 +607,7 @@ var stockAnalysisData = {
 
     function buildReportHTML() {
         var html = '';
-        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">&#x1F4CA; \u5927\u76D4\u884C\u60C5\u7EFC\u8FF0</h4>';
+        html += '<h4 style="color:#0f2862;margin:12px 0 8px;">&#x1F4CA; \u5927\u76D8\u884C\u60C5\u7EFC\u8FF0</h4>';
         html += '<p>' + R.marketEmotion.conclusion + '</p>';
         html += '<h4 style="color:#0f2862;margin:12px 0 8px;">&#x1F525; \u70ED\u95E8\u677F\u5757\u52A8\u5411</h4>';
         html += '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0;"><thead><tr style="background:#eff6ff;color:#0f2862;"><th>\u6392\u540D</th><th>\u677F\u5757</th><th>\u5E45\u5EA6</th></tr></thead><tbody>';
@@ -713,7 +713,7 @@ var stockAnalysisData = {
         var summary = R.getSummary();
         var text = '[\u80A1\u7968\u6BCF\u65E5\u667A\u80FD\u5206\u6790\u62A5\u544A]\n' + '\u2550'.repeat(40) + '\n' +
             '\u62A5\u544A\u65E5\u671F\uFF1A' + date + '\n' + '\u2550'.repeat(40) + '\n\n' +
-            '[\u5927\u76D4\u8D70\u52BF]\n';
+            '[\u5927\u76D8\u8D70\u52BF]\n';
         R.mainIndex.forEach(function(i) { text += i.indexName + '\uFF1A' + i.closePrice + ' (' + i.changeRate + ')\n'; });
         text += '\u4E24\u5E02\u6210\u4EA4\u989D\uFF1A' + R.marketEmotion.totalAmount + '\u4EBF\n\n[\u70ED\u95E8\u677F\u5757\u4E0A\u6DA8\u699C]\n';
         S.sectorRiseFall.forEach(function(s) { text += s.rank + '. ' + s.name + ' +' + s.changeRate.toFixed(2) + '%\n'; });
