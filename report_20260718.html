@@ -175,11 +175,11 @@
 
     <div class="grid-row">
         <div class="card">
-            <h3>🔥 行业板块涨跌幅 TOP（板块分析员·同花顺问财）</h3>
+            <h3>🔥 申万行业板块涨跌幅TOP15（板块分析员）</h3>
             <div class="chart-box"><canvas id="sectorChart"></canvas></div>
         </div>
         <div class="card">
-            <h3>💰 主力资金净流入TOP10个股（板块分析员）</h3>
+            <h3>💰 板块主力资金流向TOP10（板块分析员）</h3>
             <div class="chart-box"><canvas id="capitalFlowChart"></canvas></div>
         </div>
     </div>
@@ -204,7 +204,7 @@
     <div class="card" style="margin-top:20px;">
         <h3>🔥 概念板块热点TOP10（板块分析员）</h3>
         <table id="conceptTable">
-            <thead><tr><th>排名</th><th>概念板块</th><th>领涨股(上涨家数)</th><th>涨跌幅</th></tr></thead>
+            <thead><tr><th>排名</th><th>概念板块</th><th>主力净流入</th><th>涨跌幅</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
@@ -272,62 +272,58 @@ var marketAnalysisReport = {
 
 var sectorAnalysisData = {
     analysisDate: '2026-07-17',
-    // 数据来源：板块分析报告（A股热门板块分析_2026-07-17，同花顺问财）
     sectorRiseFall: [
-        { rank: 1, name: '电力', changeRate: 14.67 },
-        { rank: 2, name: '服装家纺', changeRate: 19.98 },
-        { rank: 3, name: '医药商业', changeRate: 10.04 },
-        { rank: 4, name: '医疗器械', changeRate: 10.00 },
-        { rank: 5, name: '化学制药', changeRate: 7.89 },
-        { rank: 6, name: '化学制品', changeRate: 6.41 },
-        { rank: 7, name: '半导体', changeRate: 5.19 },
-        { rank: 8, name: '电子化学品', changeRate: 4.23 },
-        { rank: 9, name: '石油加工贸易', changeRate: 3.00 },
-        { rank: 10, name: '煤炭开采加工', changeRate: 1.80 },
-        { rank: 11, name: '通信设备', changeRate: -19.99 },
-        { rank: 12, name: '自动化设备', changeRate: -20.01 },
-        { rank: 13, name: '包装印刷', changeRate: -20.01 },
-        { rank: 14, name: '教育', changeRate: -20.02 },
-        { rank: 15, name: '互联网电商', changeRate: -16.06 }
+        { rank: 1, name: '电力', changeRate: 1.25 },
+        { rank: 2, name: '银行', changeRate: 0.40 },
+        { rank: 3, name: '港口航运', changeRate: -0.40 },
+        { rank: 4, name: '油气开采及服务', changeRate: -0.45 },
+        { rank: 5, name: '公路铁路运输', changeRate: -0.58 },
+        { rank: 6, name: '保险', changeRate: -0.63 },
+        { rank: 7, name: '机场航运', changeRate: -0.90 },
+        { rank: 8, name: '证券', changeRate: -1.15 },
+        { rank: 9, name: '农化制品', changeRate: -1.72 },
+        { rank: 10, name: '厨卫电器', changeRate: -1.72 },
+        { rank: 11, name: '石油加工贸易', changeRate: -1.98 },
+        { rank: 12, name: '钢铁', changeRate: -2.05 },
+        { rank: 13, name: '燃气', changeRate: -2.07 },
+        { rank: 14, name: '化学原料', changeRate: -2.20 },
+        { rank: 15, name: '煤炭开采加工', changeRate: -2.24 }
     ],
-    // 数据来源：板块分析报告-主力资金流入TOP10个股
     capitalInflowTop10: [
-        { rank: 1, name: '德明利', industry: '半导体', inflow: 7.97, changeRate: '-10.00%' },
-        { rank: 2, name: '麦格米特', industry: '电气设备', inflow: 5.09, changeRate: '-10.00%' },
-        { rank: 3, name: '杰瑞股份', industry: '专用设备', inflow: 4.05, changeRate: '-10.00%' },
-        { rank: 4, name: '广合科技', industry: '电子元件', inflow: 3.28, changeRate: '-10.00%' },
-        { rank: 5, name: '京东方A', industry: '光学光电子', inflow: 3.37, changeRate: '+0.33%' },
-        { rank: 6, name: '风华高科', industry: '电子元件', inflow: 2.96, changeRate: '-10.00%' },
-        { rank: 7, name: '格力电器', industry: '白色家电', inflow: 2.63, changeRate: '+0.30%' },
-        { rank: 8, name: '凯莱英', industry: '医疗服务', inflow: 2.52, changeRate: '-10.00%' },
-        { rank: 9, name: '潍柴动力', industry: '汽车零部件', inflow: 1.61, changeRate: '-4.13%' },
-        { rank: 10, name: '中恒电气', industry: '电气设备', inflow: 1.35, changeRate: '-9.99%' }
+        { rank: 1, name: '电力', industry: '电力', inflow: 6.76, changeRate: '+1.25%' },
+        { rank: 2, name: '石油加工贸易', industry: '石油加工贸易', inflow: 2.16, changeRate: '-1.98%' },
+        { rank: 3, name: '厨卫电器', industry: '厨卫电器', inflow: 0.0011, changeRate: '-1.72%' },
+        { rank: 4, name: '轨交设备', industry: '轨交设备', inflow: 0.0011, changeRate: '-2.66%' },
+        { rank: 5, name: '家居用品', industry: '家居用品', inflow: -0.0016, changeRate: '-3.74%' },
+        { rank: 6, name: '化学纤维', industry: '化学纤维', inflow: -0.0030, changeRate: '-2.80%' },
+        { rank: 7, name: '纺织制造', industry: '纺织制造', inflow: -0.0031, changeRate: '-3.80%' },
+        { rank: 8, name: '燃气', industry: '燃气', inflow: -0.0052, changeRate: '-2.07%' },
+        { rank: 9, name: '贸易', industry: '贸易', inflow: -0.0052, changeRate: '-3.16%' },
+        { rank: 10, name: '小家电', industry: '小家电', inflow: -0.0087, changeRate: '-3.02%' }
     ],
-    // 数据来源：板块分析报告-概念板块涨幅TOP30
     conceptHot: [
-        { rank: 1, name: '涨停', leader: '哔哩哔哩(920305) 1/5538', changeRate: 29.49, inflow: 0 },
-        { rank: 2, name: 'DeepSeek概念', leader: '米奥会展(300795) 2/5538', changeRate: 20.05, inflow: 0 },
-        { rank: 3, name: '跨境贸易', leader: '开润股份(300577) 3/5538', changeRate: 19.98, inflow: 0 },
-        { rank: 4, name: 'OLED', leader: '珈伟新能(300317) 4/5538', changeRate: 16.01, inflow: 0 },
-        { rank: 5, name: '智能电网', leader: '山推股份(301609) 5/5538', changeRate: 14.67, inflow: 0 },
-        { rank: 6, name: '智谱AI', leader: '亿嘉和(920130) 6/5538', changeRate: 13.92, inflow: 0 },
-        { rank: 7, name: '移动支付', leader: '*ST中利(300205) 7/5538', changeRate: 13.13, inflow: 0 },
-        { rank: 8, name: '数据中心(AIDC)', leader: '新锦动力(300157) 8/5538', changeRate: 11.92, inflow: 0 },
-        { rank: 9, name: '污水处理', leader: '争光股份(301092) 9/5538', changeRate: 11.13, inflow: 0 },
-        { rank: 10, name: '智能座舱', leader: '华智能达(920046) 10/5538', changeRate: 10.09, inflow: 0 }
+        { rank: 1, name: '可燃冰', leader: '主力净流入+54.47万', changeRate: -0.54, inflow: 0.000005 },
+        { rank: 2, name: '超超临界发电', leader: '主力净流入-16.82万', changeRate: -0.64, inflow: -0.0002 },
+        { rank: 3, name: '同花顺中特估100', leader: '主力净流入-49.19亿', changeRate: -0.80, inflow: -49.19 },
+        { rank: 4, name: '高股息精选', leader: '主力净流入-32.31亿', changeRate: -1.09, inflow: -32.31 },
+        { rank: 5, name: '航运概念', leader: '主力净流入-7.09亿', changeRate: -1.28, inflow: -7.09 },
+        { rank: 6, name: '信托概念', leader: '主力净流入-1.32亿', changeRate: -1.08, inflow: -1.32 },
+        { rank: 7, name: '供销社', leader: '主力净流入-94.95万', changeRate: -1.34, inflow: -0.0009 },
+        { rank: 8, name: '抽水蓄能', leader: '主力净流入-6.05亿', changeRate: -1.50, inflow: -6.05 },
+        { rank: 9, name: '化肥', leader: '主力净流入-7.43亿', changeRate: -1.61, inflow: -7.43 },
+        { rank: 10, name: '水泥概念', leader: '主力净流入-31.28万', changeRate: -1.63, inflow: -0.0003 }
     ],
-    // 数据来源：板块分析报告-今日涨停股（强势个股TOP10）
     strongStocks: [
-        { rank: 1, code: '920305.BJ', name: '哔哩哔哩', latestPrice: '2.02', riseFall: '+29.49%', concept: '连板（涨停概念领涨）' },
-        { rank: 2, code: '300795.SZ', name: '米奥会展', latestPrice: '10.48', riseFall: '+20.05%', concept: 'AI应用+跨境贸易+AIGC（DeepSeek概念领涨）' },
-        { rank: 3, code: '300577.SZ', name: '开润股份', latestPrice: '20.36', riseFall: '+19.98%', concept: '服装家纺（领涨消费方向）' },
-        { rank: 4, code: '301609.SZ', name: '山推股份', latestPrice: '35.10', riseFall: '+14.67%', concept: '电力/智能电网（电力板块领涨）' },
-        { rank: 5, code: '600162.SH', name: '香江控股', latestPrice: '3.06', riseFall: '+10.07%', concept: '商业零售+跨境电商' },
-        { rank: 6, code: '600227.SH', name: '赤天化', latestPrice: '3.06', riseFall: '+10.07%', concept: '垃圾发电' },
-        { rank: 7, code: '603567.SH', name: '佐力药业', latestPrice: '6.03', riseFall: '+10.04%', concept: '中药+数字经济' },
-        { rank: 8, code: '000722.SZ', name: '湖南发展', latestPrice: '13.83', riseFall: '+10.02%', concept: '水利+水电' },
-        { rank: 9, code: '002432.SZ', name: '九安医疗', latestPrice: '79.20', riseFall: '+10.00%', concept: 'AI医疗+DeepSeek+月之暗面（涨停）' },
-        { rank: 10, code: '600095.SH', name: '湘财股份', latestPrice: '8.69', riseFall: '+10.00%', concept: '国企改革' }
+        { rank: 1, code: '002432.SZ', name: '九安医疗', latestPrice: '-', riseFall: '+10.00%', concept: 'AI医疗+DeepSeek+月之暗面（涨停）' },
+        { rank: 2, code: '600584.SH', name: '长电科技', latestPrice: '-', riseFall: '+2.74%', concept: '半导体封测龙头+主力净流入+7.94亿' },
+        { rank: 3, code: '300738.SZ', name: '奥飞数据', latestPrice: '-', riseFall: '+2.41%', concept: 'AI数据中心+主力净流入+6818万' },
+        { rank: 4, code: '002599.SZ', name: '盛通股份', latestPrice: '-', riseFall: '+1.91%', concept: 'AI教育' },
+        { rank: 5, code: '688012.SH', name: '中微公司', latestPrice: '-', riseFall: '-2.97%', concept: '半导体刻蚀设备龙头（主力净流入+5.31亿）' },
+        { rank: 6, code: '003019.SZ', name: '宸展光电', latestPrice: '-', riseFall: '-8.20%', concept: 'AI硬件（加速补跌）' },
+        { rank: 7, code: '688248.SH', name: '南网科技', latestPrice: '-', riseFall: '-7.99%', concept: '能源AI/科创成长' },
+        { rank: 8, code: '000000.SZ', name: '深证成指', latestPrice: '13706.88', riseFall: '-5.40%', concept: '大盘指数参考' },
+        { rank: 9, code: '000000.SH', name: '上证指数', latestPrice: '3764.15', riseFall: '-3.05%', concept: '大盘指数参考' },
+        { rank: 10, code: '399006.SZ', name: '创业板指', latestPrice: '3428.63', riseFall: '-7.15%', concept: '大盘指数参考（领跌全场）' }
     ]
 };
 
@@ -561,9 +557,10 @@ var stockAnalysisData = {
         S.conceptHot.forEach(function(item) {
             var ch = item.changeRate;
             var cls = ch >= 0 ? 'rise' : 'fall';
+            var inflowStr = item.inflow >= 0 ? '+' + (item.inflow * 10000).toFixed(0) + '万' : item.inflow.toFixed(2) + '亿';
             tBody.innerHTML += '<tr><td>' + item.rank + '</td><td><strong>' + item.name + '</strong></td>' +
-                '<td style="font-size:11px;text-align:left;max-width:200px;">' + item.leader + '</td>' +
-                '<td class="' + cls + '" style="font-weight:bold;">' + (ch >= 0 ? '+' : '') + ch.toFixed(2) + '%</td></tr>';
+                '<td class="' + (item.inflow >= 0 ? 'rise' : 'fall') + '" style="font-size:11px;">' + inflowStr + '</td>' +
+                '<td class="' + cls + '">' + (ch >= 0 ? '+' : '') + ch.toFixed(2) + '%</td></tr>';
         });
     }
 
